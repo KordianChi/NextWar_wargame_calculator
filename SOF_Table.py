@@ -161,7 +161,7 @@ class MyWindow:
         if int(self.surprise_cbx.get()) != 0:
             mod_surprise = int(self.surprise_cbx.get()) + 1
             drm_survive -= mod_surprise
-        if self.mission_type == 1:
+        if self.mission_type.get() == 1:
             drm_survive += 1
             if self.raid_mission_target_cbx.get() == 'Interdiction':
                 drm_survive += 1
