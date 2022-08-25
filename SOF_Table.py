@@ -19,8 +19,8 @@ class MyWindow:
         self.mission_type_rbtn_2 = Radiobutton(win, text='Raid', variable=self.mission_type, value=1,
                                                command=partial(self.raid_recon_active, self.mission_type))
 
-        terrain_types = ('Flat/Rough/Marsh', 'Flat Woods/Rough Woods',
-                         'Highland/Highland Woods', 'Mountain/Urban/Jungle')
+        terrain_types = ('Flat/Rough/Marsh', 'Flat Woods/Rough Wds',
+                         'Highland/Highland Wds', 'Mountain/Urban/Jungle')
         self.terrain_type_cbx = Combobox(win, values=terrain_types, width=30)
         self.terrain_type_cbx.set('Flat/Rough/Marsh')
 
@@ -79,7 +79,7 @@ class MyWindow:
         self.surprise_cbx.set('0')
         self.survive_drm_lbl = Label(win, text='Survive DRMs')
 
-        self.calculate_btn = Button(win, text='Calculate')
+        self.calculate_btn = Button(win, text='Calculate', command=self.calculate_result)
         self.result_d10_lbl = Label(win, text='Result d10:')
         self.result_d10_ent = Entry(width=8)
         self.result_lbl = Label(win, text='Result:')
@@ -144,7 +144,38 @@ class MyWindow:
             self.sam_or_theater_chk.config(state='normal')
 
     def calculate_result(self):
-        pass
+
+        self.survive_d10_ent.delete(0, 'end')
+        self.survive_ent.delete(0, 'end')
+
+
+
+
+# Check survive
+        d10_survive = randint(0, 9)
+        drm_survive = 0
+        if self.us_uk.get():
+            drm_survive -= 3
+        if self.allied.get():
+            drm_survive -= 1
+        if int(self.surprise_cbx.get()) != 0:
+            mod_surprise = int(self.surprise_cbx.get()) + 1
+            drm_survive -= mod_surprise
+        if self.mission_type == 1:
+            drm_survive += 1
+            if self.raid_mission_target_cbx.get() == 'Interdiction':
+                drm_survive += 1
+        d10_survive += drm_survive
+
+        if d10_survive < 7:
+            survive = 'Yes'
+        else:
+            survive = 'No'
+
+        self.survive_d10_ent.insert(END, d10_survive)
+        self.survive_ent.insert(END, survive)
+
+
 
 
 window = Tk()
