@@ -24,11 +24,11 @@ class MyWindow:
         self.terrain_type_cbx = Combobox(win, values=terrain_types, width=30)
         self.terrain_type_cbx.set('Flat/Rough/Marsh')
 
-        recon_types = ('HQ', 'SAM', 'Supply Depot', 'MSU','Ground Unit', 'Targeting')
+        recon_types = ('HQ', 'SAM', 'Supply Depot', 'MSU', 'Ground Unit', 'Targeting')
         self.recon_mission_target_cbx = Combobox(win, values=recon_types, width=30)
         self.recon_mission_target_cbx.set('HQ')
 
-        raid_types = ('HQ','Supply Depot', 'Interdiction', 'Instalation','Naval', 'Airfield', 'Helo',
+        raid_types = ('HQ', 'Supply Depot', 'Interdiction', 'Instalation', 'Naval', 'Airfield', 'Helo',
                       'MSU', 'Detection/SAM/Theater Weapon')
         self.raid_mission_target_cbx = Combobox(win, values=raid_types, width=30)
         self.raid_mission_target_cbx.set('HQ')
@@ -104,7 +104,6 @@ class MyWindow:
         self.less_brigade_chk.place(x=150, y=400)
         self.least_brigade_chk.place(x=150, y=440)
 
-
         self.survive_drm_lbl.place(x=300, y=40)
         self.us_uk_chk.place(x=300, y=80)
         self.allied_chk.place(x=300, y=120)
@@ -147,8 +146,16 @@ class MyWindow:
 
         self.survive_d10_ent.delete(0, 'end')
         self.survive_ent.delete(0, 'end')
+        self.result_d10_ent.delete(0, 'end')
+        self.result_ent.delete(0, 'end')
 
-
+        d10_result = randint(0, 9)
+        if self.mission_type.get() == 0 and self.recon_mission_target_cbx.get() == 'Targeting':
+            targeting_result = ['T', 'T', 'T', 'T', 'T', '-', '-', '-', '-']
+            row = d10_result
+            if row > 8:
+                row = 8
+            result = targeting_result[row]
 
 
 # Check survive
@@ -172,10 +179,10 @@ class MyWindow:
         else:
             survive = 'No'
 
-        self.survive_d10_ent.insert(END, d10_survive)
+        self.survive_d10_ent.insert(END, str(d10_survive))
         self.survive_ent.insert(END, survive)
-
-
+        self.result_d10_ent.insert(END, str(d10_result))
+        self.result_ent.insert(END, result)
 
 
 window = Tk()
