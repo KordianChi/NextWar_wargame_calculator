@@ -8,7 +8,7 @@ from random import randint
 from functools import partial
 
 
-class MyWindow:
+class SofTable:
 
     def __init__(self, win):
 
@@ -264,7 +264,7 @@ class MyWindow:
 
 
 window = Tk()
-mywin = MyWindow(window)
+mywin = SofTable(window)
 window.title('SOF Calculator')
 window.geometry("500x500+10+10")
 window.mainloop()
