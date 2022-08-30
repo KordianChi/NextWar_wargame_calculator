@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.ttk import Combobox
-from math import ceil
+from math import ceil, floor
+from random import randint
 
 
 class Application:
@@ -97,7 +98,7 @@ class Application:
 
         self.exploit_combat = BooleanVar()
         self.exploit_combat.set(False)
-        self.exploit_combat_chk = Checkbutton(win, text='Amphibious assault', variable=self.amphibious_assault)
+        self.exploit_combat_chk = Checkbutton(win, text='Exploit combat', variable=self.exploit_combat)
         self.exploit_combat_chk.place(x=970, y=160)
 
         self.surprise_lbl = Label(win, text='Surprise:')
@@ -192,6 +193,7 @@ class Application:
 
         self.combat_result_btn = Button(win, text='Combat Result', command=self.combat_result)
         self.combat_result_btn.place(x=1150, y=200)
+
         self.combat_odds_lbl = Label(win, text='Combat odds:')
         self.combat_odds_lbl.place(x=1150, y=240)
         self.combat_odds_ent = Entry(width=7)
@@ -201,6 +203,16 @@ class Application:
         self.combat_result_lbl.place(x=1150, y=280)
         self.combat_result_ent = Entry(width=7)
         self.combat_result_ent.place(x=1250, y=280)
+
+        self.reduce_attacker_loss_lbl = Label(win, text='Reduce loss:')
+        self.reduce_attacker_loss_lbl.place(x=1150, y=320)
+        self.reduce_attacker_loss_ent = Entry(width=7)
+        self.reduce_attacker_loss_ent.place(x=1250, y=320)
+
+        self.result_dice_lbl = Label(win, text='Dice:')
+        self.result_dice_lbl.place(x=1150, y=360)
+        self.result_dice_ent = Entry(width=7)
+        self.result_dice_ent.place(x=1250, y=360)
 
 
     def add_attacker(self):
@@ -254,6 +266,12 @@ class Application:
         self.calculate_col_shift_ent.insert(END, '0')
         self.calculate_drm_ent.delete(0, 'end')
         self.calculate_drm_ent.insert(END, '0')
+
+        self.combat_result_ent.delete(0, 'end')
+        self.combat_odds_ent.delete(0, 'end')
+        self.reduce_attacker_loss_ent.delete(0, 'end')
+        self.result_dice_ent.delete(0, 'end')
+
         for widgets in self.attacker_data:
             for widget in widgets:
                 widget.destroy()
@@ -378,7 +396,138 @@ class Application:
         self.calculate_drm_ent.insert(END, str(drm))
 
     def combat_result(self):
-        pass
+        combat_result_table = [['1/1R', '1/1', '1/1', '1/1', '1/-', '2/1', '2/1', '2/-',
+                                '1/1', '2/-', '3/1', '3/-', '2/1', '4/-', '4/-', '4/-'],
+                               ['1/1R', '1/1R', '1/1', '1/1', '1/1', '1/-', '2/1', '2/1',
+                                '2/-', '2/-', '2/1', '3/1', '3/-', '3/-', '2/1', '4/-'],
+                               ['-/1R', '1/1R', '1/1R', '1/1', '1/2', '1/1', '1/-', '2/1',
+                                '2/1', '2/-', '2/-', '2/-', '3/1', '2/1', '3/-', '4/-'],
+                               ['-/1R', '-/1R', '1/1R', '1/1R', '1/1', '1/-', '1/1', '1/-',
+                                '2/1', '2/1', '1/1', '2/-', '2/-', '3/1', '2/1', '2/-'],
+                               ['-/2R', '-/1R', '-/1R', '1/1R', '1/1R', '1/1', '1/1', '1/1',
+                                '1/-', '2/1', '2/1', '2/-', '2/-', '2/-', '3/1', '3/-'],
+                               ['/-2R', '1/2R', '-/1', '-/1R', '1/2', '1/1R', '1/1', '1/1',
+                                '2/1', '1/-', '2/1', '2/1', '2/-', '1/1', '2/-', '3/1'],
+                               ['-/2R', '-/2R', '1/2R', '-/1R', '-/1R', '1/1R', '1/2', '1/1',
+                                '1/1', '1/-', '1/-', '2/1', '1/1', '2/-', '2/1', '2/-'],
+                               ['-/3R', '-/2R', '-/2R', '1/2R', '-/1', '-/1R', '1/1R', '1/1R',
+                                '1/2', '1/1', '1/1', '1/-', '2/1', '1/1', '2/-', '2/1'],
+                               ['-/3R', '1/3R', '-/2R', '-/1R', '1/2R', '-/1R', '-/2', '1/1R',
+                                '1/1R', '1/1', '1/2', '1/1', '1/-', '1/1', '2/1', '3/1'],
+                               ['-/3R', '-/3R', '1/3R', '-/2R', '-/1R', '1/2R', '-/1R', '-/1R',
+                                '1/2', '1/1R', '1/1R', '1/1', '2/1', '1/-', '2/1', '1/-'],
+                               ['-/4R', '1/3R', '-/3R', '1/3R', '-/2', '-/2R', '1/2R', '-/1',
+                                '-/1R', '-/1R', '1/2', '1/1R', '1/1', '1/1', '1/-', '2/1'],
+                               ['-/4R', '1/4R', '-/3R', '1/2', '1/3R', '-/2R', '-/2', '1/2R',
+                                '-/1R', '1/1', '-/1R', '1/1R', '1/1R', '1/1', '1/1', '2/1'],
+                               ['-/4R', '-/4R', '1/4R', '1/3', '-/3R', '1/3R', '-/2', '-/2R',
+                                '1/2R', '-/1R', '-/1', '-/1R', '1/1R', '1/1R', '1/-', '2/1']]
+        terrain = self.terrain_cbx.get()
+        terrain_to_type = {"Flat": 6, "Flat Woods": 6, "Rough": 7, "Rough Woods": 7, "Marsh":7 ,
+                           "Highlands": 8, "Jungle": 8, "Highland Woods": 8, "Mountain": 9, "Urban": 10}
+        terrain_to_shift = {"Flat": 4, "Flat Woods": 4, "Rough": 3, "Rough Woods": 3, "Marsh": 3,
+                            "Highlands": 2, "Jungle": 2, "Highland Woods": 2, "Mountain": 1, "Urban": 0}
+        shift = terrain_to_shift[terrain]
+        odds_to_column = {'1:3': 1, '1:2': 2, '1:1': 3, '1.5:1': 4, '2:1': 5, '3:1': 6, '4:1': 7,
+                          '5:1': 8, '6:1': 9, '7:1': 10, '8:1': 11, '9:1': 12, '10:1': 13}
+        terrain_type = terrain_to_type[terrain]
+        self.combat_result_ent.delete(0, 'end')
+        self.combat_odds_ent.delete(0, 'end')
+        self.reduce_attacker_loss_ent.delete(0, 'end')
+        self.result_dice_ent.delete(0, 'end')
+        att = int(self.calculate_att_ent.get())
+        defe = int(self.calculate_def_ent.get())
+        mod = int(self.calculate_col_shift_ent.get())
+        drm = int(self.calculate_drm_ent.get())
+
+
+        frac = max(min(att / defe, terrain_type), min(defe / att, 3))
+        if att < defe:
+            frac = -frac
+
+        if frac == 1.5:
+            rem = 0
+        else:
+            if frac > 0:
+                rem = frac - floor(frac)
+            else:
+                rem = 0
+        if rem > 0:
+            drm -= 1
+
+        frac_to_order = {-3: -2, -2: -1, 1: 0, 1.5: 1, 2: 2, 3: 3, 4: 4,
+                         5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
+        order_to_frac = {-2: 3, -1: 2, 0: 1, 1: 1.5, 2: 2, 3: 3, 4: 4,
+                         5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
+
+        if 2 > frac >= 1.5:
+            att_res_pure = 1.5
+            order_pure = frac_to_order[att_res_pure]
+            order = order_pure + mod
+            if order > terrain_type:
+                order = terrain_type
+            if order < -2:
+                order = -2
+            if order > 0:
+                att_res = order_to_frac[order]
+                defe_res = 1
+            else:
+                defe_res = order_to_frac[order]
+                att_res = 1
+        else:
+            if frac > 0:
+                att_res_pure = floor(frac)
+
+                order_pure = frac_to_order[att_res_pure]
+                order = order_pure + mod
+                if order > terrain_type:
+                    order = terrain_type
+                if order < -2:
+                    order = -2
+                if order > 0:
+                    att_res = order_to_frac[order]
+                    defe_res = 1
+                else:
+                    defe_res = order_to_frac[order]
+                    att_res = 1
+            else:
+                if frac > -2:
+                    defe_res_pure = -2
+                else:
+                    defe_res_pure = -3
+                order_pure = frac_to_order[defe_res_pure]
+                order = order_pure + mod
+                if order > terrain_type:
+                    order = terrain_type
+                if order < -2:
+                    order = -2
+                if order > 0:
+                    att_res = order_to_frac[order]
+                    defe_res = 1
+                else:
+                    defe_res = order_to_frac[order]
+                    att_res = 1
+        dice = randint(0, 9)
+        row = dice + int(self.calculate_drm_ent.get())
+        # row normalization
+        if row > 12:
+            row = 12
+        if row < -3:
+            row = -3
+        row = row + 3
+        odds = str(att_res) + ':' + str(defe_res)
+        column = odds_to_column[odds]
+        column += shift
+        column -= 1
+
+        reduce_attacker_lost = 'No'
+        if column > 9:
+            reduce_attacker_lost = 'Yes'
+
+        self.result_dice_ent.insert(END, str(dice))
+        self.combat_odds_ent.insert(END, odds)
+        self.combat_result_ent.insert(END, str(combat_result_table[column][row]))
+        self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
 
 
 
