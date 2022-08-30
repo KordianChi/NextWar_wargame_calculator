@@ -26,7 +26,7 @@ class MyWindow:
         self.lbl9 = Label(win, text='Dice + DRM:')
         self.lbl10 = Label(win, text='Combat result:')
         self.lbl11 = Label(win, text='Reduce attacker loss:')
-        self.cb = Combobox(window, values=("Flat or Flat Woods", "Rough, Rough Woods, Marsh or Paddy",
+        self.cb = Combobox(win, values=("Flat or Flat Woods", "Rough, Rough Woods, Marsh or Paddy",
                                            "Highlands, any Jungle, Highland Woods", "Mountain", "Urban"), width=35)
 
         self.t1 = Entry(bd=3)
