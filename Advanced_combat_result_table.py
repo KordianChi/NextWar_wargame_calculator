@@ -1,10 +1,14 @@
-from tkinter import *
-from tkinter.ttk import Combobox
+from tkinter import Label, BooleanVar
+from tkinter import Entry
+from tkinter import Button
+from tkinter import END
+from tkinter import Tk
+from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
 
 
-class Application:
+class CombatResultTable:
 
     def __init__(self, win):
         self.attacker_number = 0
@@ -19,14 +23,14 @@ class Application:
         self.add_attacker_btn.place(x=10, y=10)
         self.attacker_efficiency_lbl = Label(win, text='Attacker efficiency:')
         self.attacker_efficiency_lbl.place(x=100, y=10)
-        self.attacker_efficiency_cbx =Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
+        self.attacker_efficiency_cbx = Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.attacker_efficiency_cbx.set('1')
         self.attacker_efficiency_cbx.place(x=210, y=10)
         self.add_defender_btn = Button(win, text='Add defender', command=self.add_defender)
         self.add_defender_btn.place(x=450, y=10)
         self.defender_efficiency_lbl = Label(win, text='Defender efficiency:')
         self.defender_efficiency_lbl.place(x=540, y=10)
-        self.defender_efficiency_cbx =Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
+        self.defender_efficiency_cbx = Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.defender_efficiency_cbx.set('1')
         self.defender_efficiency_cbx.place(x=655, y=10)
 
@@ -72,7 +76,8 @@ class Application:
         self.terrain_lbl = Label(win, text='Terrain Type:')
         self.terrain_lbl.place(x=870, y=10)
         self.terrain_cbx = Combobox(win, values=('Flat', 'Flat Woods', 'Rough', 'Rough Woods', 'Marsh',
-                                           'Highlands', 'Jungle', 'Highland Woods', 'Mountain', 'Urban'), width=15)
+                                                 'Highlands', 'Jungle', 'Highland Woods',
+                                                 'Mountain', 'Urban'), width=15)
         self.terrain_cbx.set('Flat')
         self.terrain_cbx.place(x=970, y=10)
 
@@ -226,7 +231,6 @@ class Application:
         self.result_dice_ent = Entry(width=7)
         self.result_dice_ent.place(x=1250, y=440)
 
-
     def add_attacker(self):
         attacker_lbl = Label(text=f'Attacker #{self.attacker_number}')
         attacker_lbl.place(x=10, y=self.y_for_attacker)
@@ -317,10 +321,10 @@ class Application:
             defender_type_list = []
             for element in self.defender_data:
                 defender_type_list.append(element[2].get())
-            armored_advantage =  self.terrain_cbx.get() in ['Flat', 'Rough'] and\
-                                 'Armored' not in defender_type_list and\
-                                 'Mechanized' not in defender_type_list and not self.in_city.get()\
-                                 and not self.is_fortified.get()
+            armored_advantage = self.terrain_cbx.get() in ['Flat', 'Rough'] and \
+                                'Armored' not in defender_type_list and \
+                                'Mechanized' not in defender_type_list and not self.in_city.get() and not \
+                                self.is_fortified.get()
             if armored_advantage:
                 if widgets[2].get() == 'Armored':
                     att = att * 2
@@ -380,7 +384,7 @@ class Application:
             support_defender_drm = -6
 
         elite_infantry_defender_drm = 0
-        if 'Light' in defender_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh','Highlands',
+        if 'Light' in defender_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
                                                                         'Jungle', 'Highland Woods',
                                                                         'Mountain', 'Urban']:
             elite_infantry_defender_drm -= 1
@@ -417,7 +421,8 @@ class Application:
         drm += support_defender_drm
         drm += support_attacker_drm
         drm += elite_infantry_defender_drm
-        drm += elite_infantry_attacker_drm
+        if not self.amphibious_assault:
+            drm += elite_infantry_attacker_drm
 
         if self.attacking_5_6_side.get():
             drm -= 2
@@ -464,7 +469,7 @@ class Application:
                                ['-/4R', '-/4R', '1/4R', '1/3', '-/3R', '1/3R', '-/2', '-/2R',
                                 '1/2R', '-/1R', '-/1', '-/1R', '1/1R', '1/1R', '1/-', '2/1']]
         terrain = self.terrain_cbx.get()
-        terrain_to_type = {"Flat": 6, "Flat Woods": 6, "Rough": 7, "Rough Woods": 7, "Marsh":7 ,
+        terrain_to_type = {"Flat": 6, "Flat Woods": 6, "Rough": 7, "Rough Woods": 7, "Marsh": 7,
                            "Highlands": 8, "Jungle": 8, "Highland Woods": 8, "Mountain": 9, "Urban": 10}
         terrain_to_shift = {"Flat": 4, "Flat Woods": 4, "Rough": 3, "Rough Woods": 3, "Marsh": 3,
                             "Highlands": 2, "Jungle": 2, "Highland Woods": 2, "Mountain": 1, "Urban": 0}
@@ -480,7 +485,6 @@ class Application:
         defe = int(self.calculate_def_ent.get())
         mod = int(self.calculate_col_shift_ent.get())
         drm = int(self.calculate_drm_ent.get())
-
 
         frac = max(min(att / defe, terrain_type), min(defe / att, 3))
         if att < defe:
@@ -571,9 +575,8 @@ class Application:
         self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
 
 
-
 window = Tk()
-mywin = Application(window)
-window.title('Create and destroy')
+mywin = CombatResultTable(window)
+window.title('Combat Result Table')
 window.geometry("1600x600+10+10")
 window.mainloop()
