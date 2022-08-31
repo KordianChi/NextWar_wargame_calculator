@@ -191,28 +191,40 @@ class Application:
         self.irop_prc_attack_chk = Checkbutton(win, text='IROP & PRC attack', variable=self.irop_prc_attack)
         self.irop_prc_attack_chk.place(x=1150, y=160)
 
+        self.attacker_cyber_shift = BooleanVar()
+        self.attacker_cyber_shift.set(False)
+        self.attacker_cyber_shift_chk = Checkbutton(win, text='Attacker Cyber Warfare',
+                                                    variable=self.attacker_cyber_shift)
+        self.attacker_cyber_shift_chk.place(x=1150, y=190)
+
+        self.defender_cyber_shift = BooleanVar()
+        self.defender_cyber_shift.set(False)
+        self.defender_cyber_shift_chk = Checkbutton(win, text='Defender Cyber Warfare',
+                                                    variable=self.defender_cyber_shift)
+        self.defender_cyber_shift_chk.place(x=1150, y=220)
+
         self.combat_result_btn = Button(win, text='Combat Result', command=self.combat_result)
-        self.combat_result_btn.place(x=1150, y=200)
+        self.combat_result_btn.place(x=1150, y=280)
 
         self.combat_odds_lbl = Label(win, text='Combat odds:')
-        self.combat_odds_lbl.place(x=1150, y=240)
+        self.combat_odds_lbl.place(x=1150, y=320)
         self.combat_odds_ent = Entry(width=7)
-        self.combat_odds_ent.place(x=1250, y=240)
+        self.combat_odds_ent.place(x=1250, y=320)
 
         self.combat_result_lbl = Label(win, text='Combat result:')
-        self.combat_result_lbl.place(x=1150, y=280)
+        self.combat_result_lbl.place(x=1150, y=360)
         self.combat_result_ent = Entry(width=7)
-        self.combat_result_ent.place(x=1250, y=280)
+        self.combat_result_ent.place(x=1250, y=360)
 
         self.reduce_attacker_loss_lbl = Label(win, text='Reduce loss:')
-        self.reduce_attacker_loss_lbl.place(x=1150, y=320)
+        self.reduce_attacker_loss_lbl.place(x=1150, y=400)
         self.reduce_attacker_loss_ent = Entry(width=7)
-        self.reduce_attacker_loss_ent.place(x=1250, y=320)
+        self.reduce_attacker_loss_ent.place(x=1250, y=400)
 
         self.result_dice_lbl = Label(win, text='Dice:')
-        self.result_dice_lbl.place(x=1150, y=360)
+        self.result_dice_lbl.place(x=1150, y=440)
         self.result_dice_ent = Entry(width=7)
-        self.result_dice_ent.place(x=1250, y=360)
+        self.result_dice_ent.place(x=1250, y=440)
 
 
     def add_attacker(self):
@@ -367,6 +379,18 @@ class Application:
         if support_defender_drm < -6:
             support_defender_drm = -6
 
+        elite_infantry_defender_drm = 0
+        if 'Light' in defender_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh','Highlands',
+                                                                        'Jungle', 'Highland Woods',
+                                                                        'Mountain', 'Urban']:
+            elite_infantry_defender_drm -= 1
+
+        if 'Mtn' in defender_type_list and self.terrain_cbx.get() in ['Highlands', 'Highland Woods', 'Mountain']:
+            elite_infantry_defender_drm -= 1
+
+        if elite_infantry_defender_drm < -1:
+            elite_infantry_defender_drm = -1
+
         support_attacker_drm = 0
         support_attacker_drm += int(self.attacker_1_helos_cbx.get())
         support_attacker_drm += int(self.attacker_2_helos_cbx.get())
@@ -375,8 +399,25 @@ class Application:
         support_attacker_drm += int(self.attacker_navy_ent.get())
         if support_attacker_drm > 6:
             support_attacker_drm = 6
+
+        elite_infantry_attacker_drm = 0
+        attacker_type_list = []
+        for element in self.attacker_data:
+            attacker_type_list.append(element[2].get())
+        if 'Light' in attacker_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
+                                                                        'Jungle', 'Highland Woods',
+                                                                        'Mountain', 'Urban']:
+            elite_infantry_attacker_drm += 1
+
+        if 'Mtn' in attacker_type_list and self.terrain_cbx.get() in ['Highlands', 'Highland Woods', 'Mountain']:
+            elite_infantry_attacker_drm += 1
+        if elite_infantry_attacker_drm > 1:
+            elite_infantry_attacker_drm = 1
+
         drm += support_defender_drm
         drm += support_attacker_drm
+        drm += elite_infantry_defender_drm
+        drm += elite_infantry_attacker_drm
 
         if self.attacking_5_6_side.get():
             drm -= 2
