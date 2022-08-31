@@ -10,22 +10,8 @@ from functools import partial
 
 class MyWindow:
     def __init__(self, win):
-        self.lbl0 = Label(win, text='Attacker:')
-        self.cb0 = Combobox(win, values=('1', '2', '3', '4', '5', '6'), width=5)
-        self.cb0.set('1')
-        self.lbl2 = Label(win, text='Defender:')
-        self.cb2 = Combobox(win, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
-        self.cb2.set('1')
-        self.lbl3 = Label(win, text='Distance:')
+
         self.lbl4 = Label(win, text='Weather:')
-        self.lbl5 = Label(win, text='DRMs:')
-        self.lbl6 = Label(win, text='dice d10:')
-        self.lbl7 = Label(win, text='DRMs:')
-        self.lbl8 = Label(win, text='Att - Def:')
-        self.lbl9 = Label(win, text='Result:')
-        self.lbl27 = Label(win, text='dice d10:')
-        self.lbl28 = Label(win, text='DRMs:')
-        self.lbl29 = Label(win, text='Result:')
         self.lbl10 = Label(win, text='Detection:')
         self.cb3 = Combobox(win, values=('Local', '0-1', '2-3', '4', '5', '6', '7', '8', '9', '10'), width=5)
         self.cb3.set('Local')
@@ -51,70 +37,30 @@ class MyWindow:
         self.lbl23 = Label(win, text='dice d10:')
         self.lbl24 = Label(win, text='Result:')
 
-        self.btn1 = Button(win, text='Calculate', command=self.calculate_a2a)
         self.btn2 = Button(win, text='Calculate', command=self.calculate_detection)
         self.btn3 = Button(win, text='Calculate', command=self.sam_defence)
         self.btn4 = Button(win, text='Calculate', command=self.aaa_defence)
 
-        self.t1 = Entry(width=10)
-        self.t2 = Entry(width=10)
-        self.t3 = Entry(width=10)
-        self.t4 = Entry(width=10)
-        self.t6 = Entry(width=10)
-        self.t7 = Entry(width=10)
-        self.t8 = Entry(width=10)
-        self.t9 = Entry(width=10)
-        self.t10 = Entry(width=10)
-        self.t11 = Entry(width=10)
-        self.t12 = Entry(width=10)
-        self.t13 = Entry(width=10)
-        self.t14 = Entry(width=10)
-        self.t15 = Entry(width=10)
-        self.t16 = Entry(width=10)
-        self.t17 = Entry(width=10)
 
-        self.strike = IntVar()
-        self.strike.set(0)
-        self.not_proper = IntVar()
-        self.not_proper.set(0)
-        self.vs_bomber = IntVar()
-        self.vs_bomber.set(0)
+        self.t6 = Entry(width=7)
+        self.t7 = Entry(width=7)
+        self.t8 = Entry(width=7)
+        self.t9 = Entry(width=7)
+        self.t10 = Entry(width=7)
+        self.t11 = Entry(width=7)
+        self.t12 = Entry(width=7)
+        self.t13 = Entry(width=7)
+        self.t14 = Entry(width=7)
 
-        self.strike_def = IntVar()
-        self.strike.set(0)
-        self.not_proper_def = IntVar()
-        self.not_proper_def.set(0)
+
 
         self.actual_weather = IntVar()
         self.actual_weather.set(1)
-        self.actual_distance = IntVar()
-        self.actual_distance.set(1)
-
-        self.not_mutual = BooleanVar()
-        self.not_mutual.set(False)
-        self.c25 = Checkbutton(win, text='not mutual firing', variable=self.not_mutual)
-
-        self.cb1 = Combobox(win, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
-        self.cb1.set('0')
-        self.cb9 = Combobox(win, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
-        self.cb9.set('0')
-        self.lbl25 = Label(win, text='Pilot skills')
-
-        self.r1 = Radiobutton(win, text="Long Range", variable=self.actual_distance,
-                              value=1, command=partial(self.skill_active, self.actual_distance))
-        self.r2 = Radiobutton(win, text="Stand-off", variable=self.actual_distance,
-                              value=2, command=partial(self.skill_active, self.actual_distance))
-        self.r3 = Radiobutton(win, text="Dogfight", variable=self.actual_distance,
-                              value=3, command=partial(self.skill_active, self.actual_distance))
 
         self.r4 = Radiobutton(win, text="Clear", variable=self.actual_weather, value=1)
         self.r5 = Radiobutton(win, text="Overcast", variable=self.actual_weather, value=2)
         self.r6 = Radiobutton(win, text="Storm", variable=self.actual_weather, value=3)
-        self.c2 = Checkbutton(win, text='CS firing', variable=self.strike)
-        self.c3 = Checkbutton(win, text='not NATO/US/JPN/PRC', variable=self.not_proper, state='disabled')
-        self.c5 = Checkbutton(win, text='vs Bomber', variable=self.vs_bomber, state='disabled')
-        self.c23 = Checkbutton(win, text='CS firing', variable=self.strike_def)
-        self.c24 = Checkbutton(win, text='not NATO/US/JPN/PRC', variable=self.not_proper_def, state='disabled')
+
 
         self.near_HQ = BooleanVar()
         self.near_HQ.set(False)
@@ -188,238 +134,62 @@ class MyWindow:
         self.aaa_vs_stealth.set(False)
         self.c22 = Checkbutton(win, text='AAA vs Stealth', variable=self.aaa_vs_stealth)
 
-        self.lbl1 = Label(win, text='Pilot skills:')
 
-        self.lbl0.place(x=50, y=40)
-        self.lbl1.place(x=50, y=80)
-        self.lbl2.place(x=250, y=40)
-        self.cb0.place(x=150, y=40)
-        self.cb1.place(x=150, y=80)
-        self.cb2.place(x=350, y=40)
-        self.lbl25.place(x=250, y=80)
-        self.c23.place(x=250, y=120)
-        self.c24.place(x=250, y=160)
-        self.cb9.place(x=350, y=80)
-        self.lbl3.place(x=450, y=40)
-        self.r1.place(x=450, y=80)
-        self.r2.place(x=450, y=120)
-        self.r3.place(x=450, y=160)
-        self.lbl4.place(x=450, y=200)
-        self.r4.place(x=450, y=240)
-        self.r5.place(x=450, y=280)
-        self.r6.place(x=450, y=320)
-        self.c2.place(x=50, y=120)
-        self.c3.place(x=50, y=160)
-        self.lbl6.place(x=50, y=280)
-        self.lbl7.place(x=50, y=240)
-        self.lbl9.place(x=50, y=320)
-        self.t1.place(x=150, y=280)
-        self.t2.place(x=150, y=240)
-        self.t4.place(x=150, y=320)
-        self.lbl27.place(x=250, y=280)
-        self.lbl28.place(x=250, y=240)
-        self.lbl29.place(x=250, y=320)
-        self.t15.place(x=350, y=280)
-        self.t16.place(x=350, y=240)
-        self.t17.place(x=350, y=320)
-        self.c25.place(x=150, y=200)
-        self.btn1.place(x=50, y=200)
-        self.lbl10.place(x=600, y=40)
-        self.cb3.place(x=700, y=40)
-        self.lbl11.place(x=600, y=80)
-        self.cb4.place(x=700, y=80)
-        self.c6.place(x=600, y=120)
-        self.c7.place(x=600, y=160)
-        self.c8.place(x=600, y=200)
-        self.c9.place(x=600, y=240)
-        self.c10.place(x=600, y=280)
-        self.c11.place(x=600, y=320)
-        self.c12.place(x=600, y=360)
-        self.c13.place(x=600, y=400)
-        self.lbl12.place(x=600, y=440)
-        self.cb5.place(x=700, y=440)
-        self.btn2.place(x=600, y=480)
-        self.lbl13.place(x=600, y=520)
-        self.lbl14.place(x=600, y=560)
-        self.lbl15.place(x=600, y=600)
-        self.t6.place(x=700, y=520)
-        self.t7.place(x=700, y=560)
-        self.t8.place(x=700, y=600)
-        self.lbl16.place(x=800, y=40)
-        self.cb6.place(x=900, y=40)
-        self.c14.place(x=800, y=80)
-        self.c15.place(x=800, y=120)
-        self.c16.place(x=800, y=160)
-        self.c17.place(x=800, y=200)
-        self.lbl17.place(x=800, y=240)
-        self.cb7.place(x=900, y=240)
-        self.btn3.place(x=800, y=280)
-        self.lbl18.place(x=800, y=320)
-        self.t9.place(x=900, y=320)
-        self.lbl19.place(x=800, y=360)
-        self.t10.place(x=900, y=360)
-        self.lbl20.place(x=800, y=400)
-        self.t11.place(x=900, y=400)
-        self.lbl21.place(x=1000, y=40)
-        self.cb8.place(x=1100, y=40)
-        self.c18.place(x=1000, y=80)
-        self.c19.place(x=1000, y=120)
-        self.c20.place(x=1000, y=160)
-        self.c21.place(x=1000, y=200)
-        self.c22.place(x=1000, y=240)
-        self.btn4.place(x=1000, y=280)
-        self.lbl22.place(x=1000, y=320)
-        self.lbl23.place(x=1000, y=360)
-        self.lbl24.place(x=1000, y=400)
-        self.t12.place(x=1100, y=320)
-        self.t13.place(x=1100, y=360)
-        self.t14.place(x=1100, y=400)
+        self.lbl10.place(x=50, y=40)
+        self.lbl11.place(x=50, y=80)
+        self.c6.place(x=50, y=120)
+        self.c7.place(x=50, y=160)
+        self.c8.place(x=50, y=200)
+        self.c9.place(x=50, y=240)
+        self.c10.place(x=50, y=280)
+        self.c11.place(x=50, y=320)
+        self.c12.place(x=50, y=360)
+        self.c13.place(x=50, y=400)
+        self.lbl12.place(x=50, y=440)
+        self.btn2.place(x=50, y=480)
+        self.lbl13.place(x=50, y=520)
+        self.lbl14.place(x=50, y=560)
+        self.lbl15.place(x=50, y=600)
+        self.cb3.place(x=150, y=40)
+        self.cb4.place(x=150, y=80)
+        self.cb5.place(x=150, y=440)
+        self.t6.place(x=150, y=520)
+        self.t7.place(x=150, y=560)
+        self.t8.place(x=150, y=600)
+        self.lbl4.place(x=250, y=440)
+        self.r4.place(x=250, y=480)
+        self.r5.place(x=250, y=520)
+        self.r6.place(x=250, y=560)
+        self.lbl16.place(x=250, y=40)
+        self.c14.place(x=250, y=80)
+        self.c15.place(x=250, y=120)
+        self.c16.place(x=250, y=160)
+        self.c17.place(x=250, y=200)
+        self.lbl17.place(x=250, y=240)
+        self.btn3.place(x=250, y=280)
+        self.lbl19.place(x=250, y=360)
+        self.lbl18.place(x=250, y=320)
+        self.lbl20.place(x=250, y=400)
+        self.cb6.place(x=350, y=40)
+        self.cb7.place(x=350, y=240)
+        self.t9.place(x=350, y=320)
+        self.t10.place(x=350, y=360)
+        self.t11.place(x=350, y=400)
+        self.lbl21.place(x=450, y=40)
+        self.c18.place(x=450, y=80)
+        self.c19.place(x=450, y=120)
+        self.c20.place(x=450, y=160)
+        self.c21.place(x=450, y=200)
+        self.c22.place(x=450, y=240)
+        self.btn4.place(x=450, y=280)
+        self.lbl22.place(x=450, y=320)
+        self.lbl23.place(x=450, y=360)
+        self.lbl24.place(x=450, y=400)
+        self.cb8.place(x=550, y=40)
+        self.t12.place(x=550, y=320)
+        self.t13.place(x=550, y=360)
+        self.t14.place(x=550, y=400)
 
-    def skill_active(self, actual_distance):
-        actual_distance = actual_distance.get()
-        if actual_distance == 3:
-            self.cb1.config(state='normal')
-            self.cb9.config(state='normal')
-        else:
-            self.cb1.config(state='disabled')
-            self.cb9.config(state='disabled')
-        if actual_distance == 2:
-            self.c3.config(state='normal')
-            self.c24.config(state='normal')
-        else:
-            self.c3.config(state='disabled')
-            self.c24.config(state='disabled')
-
-    def calculate_a2a(self):
-
-        Air_Combat_Result_dogfight = [['X', 'X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-'],
-                                      ['X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-'],
-                                      ['X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-'],
-                                      ['X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-'],
-                                      ['X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-', '-'],
-                                      ['X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-'],
-                                      ['DA', 'DA', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                      ['DA', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                      ['A', 'D', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-
-        Air_Combat_Result_long = [['X', 'X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-'],
-                                  ['X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-'],
-                                  ['X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-'],
-                                  ['X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-'],
-                                  ['X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-'],
-                                  ['X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-'],
-                                  ['DA', 'DA', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                  ['DA', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                  ['A', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-
-        self.t1.delete(0, 'end')
-        self.t2.delete(0, 'end')
-        self.t3.delete(0, 'end')
-        self.t4.delete(0, 'end')
-        self.t15.delete(0, 'end')
-        self.t16.delete(0, 'end')
-        self.t17.delete(0, 'end')
-
-        if self.cb2.get() == '#':
-            target = 0
-        else:
-            target = int(self.cb2.get())
-        fire = int(self.cb0.get())
-        diff_att = fire - target
-        if diff_att > 4:
-            diff_att = 4
-        if diff_att < -4:
-            diff_att = -4
-        column_att = -diff_att + 4
-
-        d10_att = randint(0, 9)
-        DRM_att = 0
-        if self.actual_weather.get() == 3:
-            DRM_att += 3
-        if self.strike.get() == 1:
-            DRM_att += 2
-        if target == 0 and self.actual_distance.get() == 2:
-            DRM_att -= 1
-        if self.not_proper.get() == 1 and self.actual_distance.get() == 2:
-            DRM_att += 1
-        if self.actual_distance.get() == 3:
-            skill_att = int(self.cb1.get())
-            DRM_att += skill_att
-        if self.vs_bomber.get() == 1 and self.actual_distance.get() == 3:
-            DRM_att -= 1
-        if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
-            DRM_att += 1
-
-        row_att = d10_att + DRM_att
-        if row_att > 10:
-            row_att = 10
-        if row_att < -2:
-            row_att = -2
-        row_att += 2
-
-        if self.actual_distance.get() == 3:
-            result_att = Air_Combat_Result_dogfight[column_att][row_att]
-        else:
-            result_att = Air_Combat_Result_long[column_att][row_att]
-
-        vs_bomber = target == 0
-
-        if not self.not_mutual.get() and not vs_bomber:
-
-            diff_def = target - fire
-
-            if diff_def > 4:
-                diff_def = 4
-            if diff_def < -4:
-                diff_def = -4
-            column_def = -diff_def + 4
-
-            d10_def = randint(0, 9)
-            DRM_def = 0
-
-            if self.actual_weather.get() == 3:
-                DRM_def += 3
-            if self.strike_def.get() == 1:
-                DRM_def += 2
-            if target == 0 and self.actual_distance.get() == 2:
-                DRM_def -= 1
-            if self.not_proper_def.get() == 1 and self.actual_distance.get() == 2:
-                DRM_def += 1
-            if self.actual_distance.get() == 3:
-                skill_def = int(self.cb9.get())
-                DRM_def += skill_def
-            if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
-                DRM_def += 1
-
-            row_def = d10_def + DRM_def
-            if row_def > 10:
-                row_def = 10
-            if row_def < -2:
-                row_def = -2
-            row_def += 2
-
-            if self.actual_distance.get() == 3:
-                result_def = Air_Combat_Result_dogfight[column_def][row_def]
-            else:
-                result_def = Air_Combat_Result_long[column_def][row_def]
-        else:
-            d10_def = '-'
-            DRM_def = '-'
-            result_def = '-'
-
-        self.t4.insert(END, result_att)
-        self.t2.insert(END, str(DRM_att))
-        self.t1.insert(END, str(d10_att))
-        self.t15.insert(END, str(d10_def))
-        self.t16.insert(END, str(DRM_def))
-        self.t17.insert(END, str(result_def))
-
-        self.not_proper.set(0)
-        self.strike.set(0)
-        self.not_proper_def.set(0)
-        self.strike_def.set(0)
-        self.vs_bomber.set(0)
-        self.not_mutual.set(False)
 
     def calculate_detection(self):
 
@@ -567,5 +337,5 @@ class MyWindow:
 window = Tk()
 mywin = MyWindow(window)
 window.title('Advanced Air Warfare Calculator')
-window.geometry("1300x800+10+10")
+window.geometry("650x650+10+10")
 window.mainloop()

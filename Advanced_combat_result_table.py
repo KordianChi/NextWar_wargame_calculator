@@ -578,5 +578,5 @@ class CombatResultTable:
 window = Tk()
 mywin = CombatResultTable(window)
 window.title('Combat Result Table')
-window.geometry("1600x600+10+10")
+window.geometry("1500x600+10+10")
 window.mainloop()
