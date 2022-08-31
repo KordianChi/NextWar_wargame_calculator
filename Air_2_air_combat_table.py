@@ -8,7 +8,7 @@ from random import randint
 from functools import partial
 
 
-class MyWindow:
+class AirToAirCombatTable:
     def __init__(self, win):
 
         self.attacker_value_lbl = Label(win, text='Attacker:')
@@ -24,11 +24,11 @@ class MyWindow:
         self.actual_distance = IntVar()
         self.actual_distance.set(1)
         self.distance_r1 = Radiobutton(win, text="Long Range", variable=self.actual_distance,
-                              value=1, command=partial(self.skill_active, self.actual_distance))
+                                       value=1, command=partial(self.skill_active, self.actual_distance))
         self.distance_r2 = Radiobutton(win, text="Stand-off", variable=self.actual_distance,
-                              value=2, command=partial(self.skill_active, self.actual_distance))
+                                       value=2, command=partial(self.skill_active, self.actual_distance))
         self.distance_r3 = Radiobutton(win, text="Dogfight", variable=self.actual_distance,
-                              value=3, command=partial(self.skill_active, self.actual_distance))
+                                       value=3, command=partial(self.skill_active, self.actual_distance))
 
         self.weather_lbl = Label(win, text='Weather:')
         self.actual_weather = IntVar()
@@ -55,7 +55,8 @@ class MyWindow:
 
         self.not_proper_att = BooleanVar()
         self.not_proper_att.set(False)
-        self.not_proper_att_chk = Checkbutton(win, text='not NATO/US/JPN/PRC', variable=self.not_proper_att, state='disabled')
+        self.not_proper_att_chk = Checkbutton(win, text='not NATO/US/JPN/PRC', variable=self.not_proper_att,
+                                              state='disabled')
 
         self.strike_att = BooleanVar()
         self.strike_att.set(False)
@@ -129,7 +130,6 @@ class MyWindow:
             self.not_proper_att_chk.config(state='disabled')
             self.not_proper_def_chk.config(state='disabled')
 
-
     def calculate_a2a(self):
 
         Air_Combat_Result_dogfight = [['X', 'X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-'],
@@ -182,7 +182,7 @@ class MyWindow:
         if self.not_proper_att.get() and self.actual_distance.get() == 2:
             DRM_att += 1
         if self.actual_distance.get() == 3:
-            skill_att = int(self.attacker_pilot_skills_lbl.get())
+            skill_att = int(self.attacker_pilot_skills_cbx.get())
             DRM_att += skill_att
         if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
             DRM_att += 1
@@ -258,11 +258,8 @@ class MyWindow:
         self.not_mutual.set(False)
 
 
-
-
-
 window = Tk()
-mywin = MyWindow(window)
+mywin = AirToAirCombatTable(window)
 window.title('Advanced Air Warfare Calculator')
 window.geometry("600x400+10+10")
 window.mainloop()

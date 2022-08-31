@@ -8,7 +8,7 @@ from random import randint
 # from functools import partial
 
 
-class MyWindow:
+class StrikeTable:
 
     def __init__(self, win):
 
@@ -328,18 +328,19 @@ class MyWindow:
                                    ['Air*', 'Air*', 'Air', 'AmPt', '-', '-', '-', '-'],
                                    ['Air AmPt', 'Air AmPt', 'Air', 'Air', '-', '-', '-', '-'],
                                    ['Air* Air AmPt', 'Air* AmPt', 'Air AmPt', 'Air', 'Air', '-', '-', '-'],
-                                   ['Air* Air AmPt', 'Air* Air AmPt', 'Air* AmPt', 'Air AmPt', 'Air', 'Air', 'Air', '-'],
+                                   ['Air* Air AmPt', 'Air* Air AmPt', 'Air* AmPt', 'Air AmPt', 'Air', 'Air', 'Air',
+                                    '-'],
                                    ['Step', 'Step', '-', '-', '-', '-', '-', '-'],
                                    ['Elim', 'Step', 'Step', '-', '-', '-', '-', '-'],
                                    ['Elim', 'Elim', 'Step', 'Step', '-', '-', '-', '-']]
 
         result = collateral_damage_table[column][row]
-        self.d10_coll_ent.insert(END, d10_coll)
+        self.d10_coll_ent.insert(END, str(d10_coll))
         self.collateral_damage_ent.insert(END, result)
 
 
 window = Tk()
-mywin = MyWindow(window)
+mywin = StrikeTable(window)
 window.title('Advanced Air Warfare Calculator')
 window.geometry("600x600+10+10")
 window.mainloop()

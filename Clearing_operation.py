@@ -6,6 +6,7 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from random import randint
 
+
 class ClearingOperation:
     def __init__(self, win):
 
@@ -56,7 +57,6 @@ class ClearingOperation:
         self.loss_result_ent.place(x=100, y=230)
         self.paradrop_chk.place(x=200, y=20)
         self.combined_arms_chk.place(x=200, y=50)
-
 
     def clearing(self):
         self.clearing_d10_ent.delete(0, 'end')

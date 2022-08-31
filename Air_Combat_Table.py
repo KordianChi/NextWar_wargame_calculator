@@ -5,10 +5,9 @@ from tkinter import END
 from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
-from functools import partial
 
 
-class MyWindow:
+class AirCombatTable:
     def __init__(self, win):
 
         self.lbl4 = Label(win, text='Weather:')
@@ -41,7 +40,6 @@ class MyWindow:
         self.btn3 = Button(win, text='Calculate', command=self.sam_defence)
         self.btn4 = Button(win, text='Calculate', command=self.aaa_defence)
 
-
         self.t6 = Entry(width=7)
         self.t7 = Entry(width=7)
         self.t8 = Entry(width=7)
@@ -52,15 +50,12 @@ class MyWindow:
         self.t13 = Entry(width=7)
         self.t14 = Entry(width=7)
 
-
-
         self.actual_weather = IntVar()
         self.actual_weather.set(1)
 
         self.r4 = Radiobutton(win, text="Clear", variable=self.actual_weather, value=1)
         self.r5 = Radiobutton(win, text="Overcast", variable=self.actual_weather, value=2)
         self.r6 = Radiobutton(win, text="Storm", variable=self.actual_weather, value=3)
-
 
         self.near_HQ = BooleanVar()
         self.near_HQ.set(False)
@@ -134,7 +129,6 @@ class MyWindow:
         self.aaa_vs_stealth.set(False)
         self.c22 = Checkbutton(win, text='AAA vs Stealth', variable=self.aaa_vs_stealth)
 
-
         self.lbl10.place(x=50, y=40)
         self.lbl11.place(x=50, y=80)
         self.c6.place(x=50, y=120)
@@ -189,7 +183,6 @@ class MyWindow:
         self.t12.place(x=550, y=320)
         self.t13.place(x=550, y=360)
         self.t14.place(x=550, y=400)
-
 
     def calculate_detection(self):
 
@@ -335,7 +328,7 @@ class MyWindow:
 
 
 window = Tk()
-mywin = MyWindow(window)
+mywin = AirCombatTable(window)
 window.title('Advanced Air Warfare Calculator')
 window.geometry("650x650+10+10")
 window.mainloop()

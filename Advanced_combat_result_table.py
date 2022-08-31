@@ -321,10 +321,9 @@ class CombatResultTable:
             defender_type_list = []
             for element in self.defender_data:
                 defender_type_list.append(element[2].get())
-            armored_advantage = self.terrain_cbx.get() in ['Flat', 'Rough'] and \
-                                'Armored' not in defender_type_list and \
-                                'Mechanized' not in defender_type_list and not self.in_city.get() and not \
-                                self.is_fortified.get()
+            armored_advantage = self.terrain_cbx.get() in ['Flat', 'Rough'] and 'Armored' not in defender_type_list and\
+                                'Mechanized' not in defender_type_list \
+                                and not self.in_city.get() and not self.is_fortified.get()
             if armored_advantage:
                 if widgets[2].get() == 'Armored':
                     att = att * 2
@@ -383,6 +382,9 @@ class CombatResultTable:
         if support_defender_drm < -6:
             support_defender_drm = -6
 
+        defender_type_list = []
+        for element in self.defender_data:
+            defender_type_list.append(element[2].get())
         elite_infantry_defender_drm = 0
         if 'Light' in defender_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
                                                                         'Jungle', 'Highland Woods',
