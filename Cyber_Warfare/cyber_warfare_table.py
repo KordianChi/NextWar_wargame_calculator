@@ -5,7 +5,7 @@ from tkinter import END
 from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from random import randint
-from Constant_tables import mission_to_number, cyber_warfare_table
+from cyber_warfare_constants import mission_to_number, cyber_warfare_table
 
 
 class CyberWarfareTable:

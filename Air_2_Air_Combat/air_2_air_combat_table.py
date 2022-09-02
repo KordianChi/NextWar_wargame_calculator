@@ -6,7 +6,7 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
-from Constant_tables import Air_Combat_Result_dogfight, Air_Combat_Result_long
+from air_2_air_constants import Air_Combat_Result_dogfight, Air_Combat_Result_long
 
 
 class AirToAirCombatTable:

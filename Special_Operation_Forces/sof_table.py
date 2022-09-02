@@ -6,7 +6,7 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
-from Constant_tables import raid_result_table, recon_result_table, targeting_result, detection_result, terrain_types, \
+from sof_constants import raid_result_table, recon_result_table, targeting_result, detection_result, terrain_types, \
     recon_types, raid_types, recon_table, raid_table
 
 

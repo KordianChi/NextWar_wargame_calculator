@@ -6,7 +6,7 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
-from Constant_tables import combat_result_table, terrain_to_type, terrain_to_shift, frac_to_order, order_to_frac,\
+from ground_combat_constants import combat_result_table, terrain_to_type, terrain_to_shift, frac_to_order, order_to_frac,\
     odds_to_column
 
 
