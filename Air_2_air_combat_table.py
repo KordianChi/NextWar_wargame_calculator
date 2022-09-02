@@ -6,6 +6,7 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
+from Constant_tables import Air_Combat_Result_dogfight, Air_Combat_Result_long
 
 
 class AirToAirCombatTable:
@@ -131,26 +132,6 @@ class AirToAirCombatTable:
             self.not_proper_def_chk.config(state='disabled')
 
     def calculate_a2a(self):
-
-        Air_Combat_Result_dogfight = [['X', 'X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-'],
-                                      ['X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-'],
-                                      ['X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-'],
-                                      ['X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-'],
-                                      ['X', 'X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-', '-'],
-                                      ['X', 'DA', 'DA', 'A', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-'],
-                                      ['DA', 'DA', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                      ['DA', 'A', 'D', 'D', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                      ['A', 'D', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-
-        Air_Combat_Result_long = [['X', 'X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-'],
-                                  ['X', 'X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-'],
-                                  ['X', 'X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-'],
-                                  ['X', 'X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-'],
-                                  ['X', 'X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-'],
-                                  ['X', 'DA', 'DA', 'A', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-'],
-                                  ['DA', 'DA', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                  ['DA', 'A', 'Ad', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                                  ['A', 'Ad', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
 
         self.d10_att_ent.delete(0, 'end')
         self.DRM_att_ent.delete(0, 'end')

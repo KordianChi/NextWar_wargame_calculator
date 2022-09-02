@@ -5,6 +5,7 @@ from tkinter import END
 from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from random import randint
+from Constant_tables import mission_to_number, cyber_warfare_table
 
 
 class CyberWarfareTable:
@@ -60,10 +61,6 @@ class CyberWarfareTable:
         self.defender_survive_ent.delete(0, 'end')
         self.result_ent.delete(0, 'end')
 
-        mission_to_number = {'UN Resolution': 0, 'Electronic Detection': 1, 'Air Superiority': 2, 'Strike Phase': 3,
-                          'Ground Combat': 4}
-        cyber_warfare_table = [[0, 2, 3, 4, 6, 7, 8, 9], [0, 2, 3, 4, 5, 7, 8, 9], [0, 1, 2, 4, 5, 6, 8, 9],
-                               [0, 2, 4, 5, 6, 7, 8, 9], [0, 3, 4, 5, 6, 7, 8 ,9], [0, 1, 3, 4, 5, 6, 7 ,8]]
         mission_number = mission_to_number[self.cwc_mission_cbx.get()]
         row = cyber_warfare_table[mission_number]
         attack_value = int(self.cwc_attack_cbx.get()) - int(self.cwc_defend_cbx.get())

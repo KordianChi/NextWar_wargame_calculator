@@ -6,10 +6,11 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
+from Constant_tables import combat_result_table, terrain_to_type, terrain_to_shift, frac_to_order, order_to_frac,\
+    odds_to_column
 
 
 class CombatResultTable:
-
     def __init__(self, win):
         self.attacker_number = 0
         self.defender_number = 0
@@ -174,11 +175,11 @@ class CombatResultTable:
         self.attacking_3_4_side_chk = Checkbutton(win, text='Attack from 3 or 4 hex', variable=self.attacking_3_4_side)
         self.attacking_3_4_side_chk.place(x=1150, y=40)
 
-        self.defender_in_instalation = BooleanVar()
-        self.defender_in_instalation.set(False)
-        self.defender_in_instalation_chk = Checkbutton(win, text='Defender in instalation/airfield/town',
-                                                       variable=self.defender_in_instalation)
-        self.defender_in_instalation_chk.place(x=1150, y=70)
+        self.defender_in_installation = BooleanVar()
+        self.defender_in_installation.set(False)
+        self.defender_in_installation_chk = Checkbutton(win, text='Defender in installation/airfield/town',
+                                                        variable=self.defender_in_installation)
+        self.defender_in_installation_chk.place(x=1150, y=70)
 
         self.multi_formation_lbl = Label(win, text='Multi-formation:')
         self.multi_formation_lbl.place(x=1150, y=100)
@@ -430,7 +431,7 @@ class CombatResultTable:
             drm -= 2
         if self.attacking_3_4_side.get():
             drm -= 1
-        if self.defender_in_instalation.get():
+        if self.defender_in_installation.get():
             drm += 1
         drm += int(self.multi_formation_ent.get())
         if self.multi_nation_attack.get():
@@ -444,40 +445,9 @@ class CombatResultTable:
         self.calculate_drm_ent.insert(END, str(drm))
 
     def combat_result(self):
-        combat_result_table = [['1/1R', '1/1', '1/1', '1/1', '1/-', '2/1', '2/1', '2/-',
-                                '1/1', '2/-', '3/1', '3/-', '2/1', '4/-', '4/-', '4/-'],
-                               ['1/1R', '1/1R', '1/1', '1/1', '1/1', '1/-', '2/1', '2/1',
-                                '2/-', '2/-', '2/1', '3/1', '3/-', '3/-', '2/1', '4/-'],
-                               ['-/1R', '1/1R', '1/1R', '1/1', '1/2', '1/1', '1/-', '2/1',
-                                '2/1', '2/-', '2/-', '2/-', '3/1', '2/1', '3/-', '4/-'],
-                               ['-/1R', '-/1R', '1/1R', '1/1R', '1/1', '1/-', '1/1', '1/-',
-                                '2/1', '2/1', '1/1', '2/-', '2/-', '3/1', '2/1', '2/-'],
-                               ['-/2R', '-/1R', '-/1R', '1/1R', '1/1R', '1/1', '1/1', '1/1',
-                                '1/-', '2/1', '2/1', '2/-', '2/-', '2/-', '3/1', '3/-'],
-                               ['/-2R', '1/2R', '-/1', '-/1R', '1/2', '1/1R', '1/1', '1/1',
-                                '2/1', '1/-', '2/1', '2/1', '2/-', '1/1', '2/-', '3/1'],
-                               ['-/2R', '-/2R', '1/2R', '-/1R', '-/1R', '1/1R', '1/2', '1/1',
-                                '1/1', '1/-', '1/-', '2/1', '1/1', '2/-', '2/1', '2/-'],
-                               ['-/3R', '-/2R', '-/2R', '1/2R', '-/1', '-/1R', '1/1R', '1/1R',
-                                '1/2', '1/1', '1/1', '1/-', '2/1', '1/1', '2/-', '2/1'],
-                               ['-/3R', '1/3R', '-/2R', '-/1R', '1/2R', '-/1R', '-/2', '1/1R',
-                                '1/1R', '1/1', '1/2', '1/1', '1/-', '1/1', '2/1', '3/1'],
-                               ['-/3R', '-/3R', '1/3R', '-/2R', '-/1R', '1/2R', '-/1R', '-/1R',
-                                '1/2', '1/1R', '1/1R', '1/1', '2/1', '1/-', '2/1', '1/-'],
-                               ['-/4R', '1/3R', '-/3R', '1/3R', '-/2', '-/2R', '1/2R', '-/1',
-                                '-/1R', '-/1R', '1/2', '1/1R', '1/1', '1/1', '1/-', '2/1'],
-                               ['-/4R', '1/4R', '-/3R', '1/2', '1/3R', '-/2R', '-/2', '1/2R',
-                                '-/1R', '1/1', '-/1R', '1/1R', '1/1R', '1/1', '1/1', '2/1'],
-                               ['-/4R', '-/4R', '1/4R', '1/3', '-/3R', '1/3R', '-/2', '-/2R',
-                                '1/2R', '-/1R', '-/1', '-/1R', '1/1R', '1/1R', '1/-', '2/1']]
+
         terrain = self.terrain_cbx.get()
-        terrain_to_type = {"Flat": 6, "Flat Woods": 6, "Rough": 7, "Rough Woods": 7, "Marsh": 7,
-                           "Highlands": 8, "Jungle": 8, "Highland Woods": 8, "Mountain": 9, "Urban": 10}
-        terrain_to_shift = {"Flat": 4, "Flat Woods": 4, "Rough": 3, "Rough Woods": 3, "Marsh": 3,
-                            "Highlands": 2, "Jungle": 2, "Highland Woods": 2, "Mountain": 1, "Urban": 0}
         shift = terrain_to_shift[terrain]
-        odds_to_column = {'1:3': 1, '1:2': 2, '1:1': 3, '1.5:1': 4, '2:1': 5, '3:1': 6, '4:1': 7,
-                          '5:1': 8, '6:1': 9, '7:1': 10, '8:1': 11, '9:1': 12, '10:1': 13}
         terrain_type = terrain_to_type[terrain]
         self.combat_result_ent.delete(0, 'end')
         self.combat_odds_ent.delete(0, 'end')
@@ -501,11 +471,6 @@ class CombatResultTable:
                 rem = 0
         if rem > 0:
             drm -= 1
-
-        frac_to_order = {-3: -2, -2: -1, 1: 0, 1.5: 1, 2: 2, 3: 3, 4: 4,
-                         5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
-        order_to_frac = {-2: 3, -1: 2, 0: 1, 1: 1.5, 2: 2, 3: 3, 4: 4,
-                         5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
 
         if 2 > frac >= 1.5:
             att_res_pure = 1.5

@@ -5,6 +5,8 @@ from tkinter import END
 from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
+from Constant_tables import detection_to_column, advanced_detection_table, sam_value_to_column, advanced_sam_table,\
+    aaa_value_to_column, advanced_aaa_table
 
 
 class AirCombatTable:
@@ -189,18 +191,6 @@ class AirCombatTable:
         self.t6.delete(0, 'end')
         self.t7.delete(0, 'end')
         self.t8.delete(0, 'end')
-        detection_to_column = {'Local': 0, '0-1': 1, '2-3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '10': 9}
-        advanced_detection_table = [['D', 'D', 'D', '-', '-', '-', '-', '-', '-', '-'],
-                                    ['ED', 'D', 'D', '-', '-', '-', '-', '-', '-', '-'],
-                                    ['ED', 'D', 'D', 'D', '-', '-', '-', '-', '-', '-'],
-                                    ['ED', 'ED', 'D', 'D', 'D', '-', '-', '-', '-', '-'],
-                                    ['ED', 'ED', 'D', 'D', 'D', 'D', '-', '-', '-', '-'],
-                                    ['ED', 'ED', 'ED', 'D', 'D', 'D', 'D', '-', '-', '-'],
-                                    ['ED', 'ED', 'ED', 'D', 'D', 'D', 'D', 'D', '-', '-'],
-                                    ['ED', 'ED', 'ED', 'ED', 'D', 'D', 'D', 'D', '-', '-'],
-                                    ['ED', 'ED', 'ED', 'ED', 'D', 'D', 'D', 'D', 'D', '-'],
-                                    ['ED', 'ED', 'ED', 'ED', 'ED', 'D', 'D', 'D', 'D', '-']]
-
         detection_value = self.cb3.get()
         column = detection_to_column[detection_value]
 
@@ -248,16 +238,6 @@ class AirCombatTable:
         self.t10.delete(0, 'end')
         self.t11.delete(0, 'end')
 
-        sam_value_to_column = {'Local': 2, '0-1': 0, '2': 1, '3-4': 2, '5-6': 3, '7': 4, '8': 5, '9': 6, '10': 7}
-        advanced_sam_table = [['A', '+1', '+1', '-', '-', '-', '-', '-', '-', '-', '-'],
-                              ['A', '+2', '+1', '+1', '-', '-', '-', '-', '-', '-', '-'],
-                              ['X', 'A', '+2', '+1', '+1', '-', '-', '-', '-', '-', '-'],
-                              ['X', 'A', 'A', '+2', '+1', '+1', '-', '-', '-', '-', '-'],
-                              ['X', 'A', 'A', '+2', '+2', '+1', '+1', '-', '-', '-', '-'],
-                              ['X', 'X', 'A', 'A', '+2', '+2', '+1', '+1', '-', '-', '-'],
-                              ['X', 'X', 'A', 'A', 'A', '+2', '+2', '+1', '+1', '-', '-'],
-                              ['X', 'X', 'X', 'A', 'A', 'A', '+2', '+2', '+1', '+1', '-']]
-
         column = sam_value_to_column[self.cb6.get()]
 
         d10 = randint(0, 9)
@@ -292,10 +272,6 @@ class AirCombatTable:
         self.t13.delete(0, 'end')
         self.t14.delete(0, 'end')
 
-        aaa_value_to_column = {'Local': 0, '0-1': 0, '2': 1, '3': 2}
-        advanced_aaa_table = [['+2', '+1', '+1', '-', '-', '-', '-', '-', '-', '-'],
-                              ['A', '+2', '+2', '+1', '+1', '-', '-', '-', '-', '-'],
-                              ['X', 'A', 'A', '+2', '+2', '+1', '+1', '-', '-', '-']]
         column = aaa_value_to_column[self.cb8.get()]
 
         d10 = randint(0, 9)

@@ -5,7 +5,8 @@ from tkinter import END
 from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
-# from functools import partial
+from Constant_tables import attacker_types, target_types, strike_table_no_air, strike_table_air_only, air_attacker,\
+    advanced_strike_table, advanced_strike_table_vs_aa, collateral_damage_table
 
 
 class StrikeTable:
@@ -13,8 +14,6 @@ class StrikeTable:
     def __init__(self, win):
 
         self.attacker_type_lbl = Label(win, text='Attacker type:')
-        attacker_types = ('Air Strike', 'Sup_HQ', 'US_HQ', 'other_HQ', 'Artillery',
-                          'Helo 1', 'Helo 2', 'SCUD', 'Cruise', 'Wild Weasel')
         self.attacker_type_cbx = Combobox(win, values=attacker_types, width=10)
         self.attacker_type_cbx.set('Air Strike')
 
@@ -23,8 +22,6 @@ class StrikeTable:
         self.air_strike_value_cbx.set('1')
         self.target_type_lbl = Label(win, text='Target type:')
 
-        target_types = ('Marsh/Flat', 'Rough/Rough Woods/Flat Woods', 'Highland/Highland Woods', 'Mountain',
-                        'Urban', 'Air Defense Track', 'Hardened Target')
         self.target_type_cbx = Combobox(win, values=target_types, width=30)
         self.target_type_cbx.set('Marsh/Flat')
 
@@ -172,50 +169,6 @@ class StrikeTable:
         self.strike_d10_ent.delete(0, 'end')
         self.strike_drm_ent.delete(0, 'end')
 
-        air_strike_target_1 = {'Urban': 9, 'Mountain': 9, 'Highland/Highland Woods': 0,
-                               'Rough/Rough Woods/Flat Woods': 1, 'Marsh/Flat': 2, 'Hardened Target': 9,
-                               'Air Defense Track': 9}
-        air_strike_target_2 = {'Urban': 0, 'Mountain': 0, 'Highland/Highland Woods': 1,
-                               'Rough/Rough Woods/Flat Woods': 2, 'Marsh/Flat': 3,
-                               'Hardened Target': 0, 'Air Defense Track': 0}
-        air_strike_target_3 = {'Urban': 1, 'Mountain': 1, 'Highland/Highland Woods': 2,
-                               'Rough/Rough Woods/Flat Woods': 3, 'Marsh/Flat': 4, 'Hardened Target': 1,
-                               'Air Defense Track': 1}
-        air_strike_target_4 = {'Urban': 2, 'Mountain': 2, 'Highland/Highland Woods': 3,
-                               'Rough/Rough Woods/Flat Woods': 4, 'Marsh/Flat': 5, 'Hardened Target': 2,
-                               'Air Defense Track': 2}
-        air_strike_target_5 = {'Urban': 3, 'Mountain': 3, 'Highland/Highland Woods': 4,
-                               'Rough/Rough Woods/Flat Woods': 5, 'Marsh/Flat': 6, 'Hardened Target': 3,
-                               'Air Defense Track': 3}
-        air_strike_target_6 = {'Urban': 5, 'Mountain': 5, 'Highland/Highland Woods': 5,
-                               'Rough/Rough Woods/Flat Woods': 6, 'Marsh/Flat': 6, 'Hardened Target': 4,
-                               'Air Defense Track': 3}
-        sup_hq_target = {'Urban': 0, 'Mountain': 0, 'Highland/Highland Woods': 1, 'Rough/Rough Woods/Flat Woods': 2,
-                         'Marsh/Flat': 3, 'Hardened Target': 9, 'Air Defense Track': 9}
-        us_hq_target = {'Urban': 2, 'Mountain': 2, 'Highland/Highland Woods': 3, 'Rough/Rough Woods/Flat Woods': 4,
-                        'Marsh/Flat': 5, 'Hardened Target': 9, 'Air Defense Track': 9}
-        other_hq_target = {'Urban': 1, 'Mountain': 1, 'Highland/Highland Woods': 2, 'Rough/Rough Woods/Flat Woods': 3,
-                           'Marsh/Flat': 4, 'Hardened Target': 9, 'Air Defense Track': 9}
-        artillery_target = {'Urban': 1, 'Mountain': 1, 'Highland/Highland Woods': 2, 'Rough/Rough Woods/Flat Woods': 3,
-                            'Marsh/Flat': 4, 'Hardened Target': 9, 'Air Defense Track': 9}
-        helo_2_target = {'Urban': 2, 'Mountain': 2, 'Highland/Highland Woods': 3, 'Rough/Rough Woods/Flat Woods': 4,
-                         'Marsh/Flat': 5, 'Hardened Target': 9, 'Air Defense Track': 9}
-        helo_1_target = {'Urban': 0, 'Mountain': 0, 'Highland/Highland Woods': 1, 'Rough/Rough Woods/Flat Woods': 2,
-                         'Marsh/Flat': 3, 'Hardened Target': 9, 'Air Defense Track': 9}
-        scud_target = {'Urban': 3, 'Mountain': 3, 'Highland/Highland Woods': 7, 'Rough/Rough Woods/Flat Woods': 7,
-                       'Marsh/Flat': 7, 'Hardened Target': 2, 'Air Defense Track': 9}
-        cruise_target = {'Urban': 4, 'Mountain': 4, 'Highland/Highland Woods': 8, 'Rough/Rough Woods/Flat Woods': 8,
-                         'Marsh/Flat': 8, 'Hardened Target': 3, 'Air Defense Track': 2}
-        wild_weasel_target = {'Urban': 9, 'Mountain': 9, 'Highland/Highland Woods': 9,
-                              'Rough/Rough Woods/Flat Woods': 9, 'Marsh/Flat': 9, 'Hardened Target': 9,
-                              'Air Defense Track': 4}
-        strike_table_no_air = {'Sup_HQ': sup_hq_target, 'US_HQ': us_hq_target,
-                               'other_HQ': other_hq_target, 'Artillery': artillery_target, 'Helo 1': helo_1_target,
-                               'Helo 2': helo_2_target, 'SCUD': scud_target, 'Cruise': cruise_target,
-                               'Wild Weasel': wild_weasel_target}
-        strike_table_air_only = {'1': air_strike_target_1, '2': air_strike_target_2, '3': air_strike_target_3,
-                                 '4': air_strike_target_4, '5': air_strike_target_5, '6': air_strike_target_6}
-
         if self.attacker_type_cbx.get() != 'Air Strike':
             target = strike_table_no_air[self.attacker_type_cbx.get()]
             column = target[self.target_type_cbx.get()]
@@ -253,7 +206,6 @@ class StrikeTable:
         drm_strike += int(self.pilot_skills_cbx.get())
         if self.actual_weather == 3:
             drm_strike += 3
-        air_attacker = ['Air Strike', 'Helo 1', 'Helo 2', 'SCUD', 'Cruise', 'Wild Weasel']
         if self.actual_weather == 2 and self.attacker_type_cbx.get() in air_attacker:
             drm_strike += 2
         row = d10_strike + drm_strike
@@ -261,33 +213,6 @@ class StrikeTable:
             row = -2
         if row > 7:
             row = 7
-
-        advanced_strike_table = [['Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', '-', '-', '-', '-', '-', '-'],
-                                 ['Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1',
-                                  '-', '-', '-', '-'],
-                                 ['Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1',
-                                  '-', '-', '-'],
-                                 ['Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1',
-                                  'Strike 1', '-', '-'],
-                                 ['X', 'X', 'Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', 'Strike 1',
-                                  'Strike 1', '-'],
-                                 ['X', 'X', 'X', 'Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1',
-                                  'Strike 1', '-'],
-                                 ['X', 'X', 'X', 'X', 'Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', '-'],
-                                 ['X', 'X', 'X', 'Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', '-', '-'],
-                                 ['X', 'X', 'X', 'X', 'Strike 2', 'Strike 2', 'Strike 1', 'Strike 1', 'Strike 1', '-'],
-                                 ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-
-        advanced_strike_table_vs_aa = [['-1', '-1', '-1', '-1', '-', '-', '-', '-', '-', '-'],
-                                       ['-1', '-1', '-1', '-1', '-1', '-1', '-', '-', '-', '-'],
-                                       ['-2', '-1', '-1', '-1', '-1', '-1', '-1', '-', '-', '-'],
-                                       ['-2', '-2', '-1', '-1', '-1', '-1', '-1', '-1', '-', '-'],
-                                       ['-3', '-3', '-2', '-2', '-1', '-1', '-1', '-1', '-1', '-'],
-                                       ['-3', '-3', '-3', '-2', '-2', '-1', '-1', '-1', '-1', '-'],
-                                       ['-3', '-3', '-3', '-3', '-2', '-2', '-1', '-1', '-1', '-'],
-                                       ['-3', '-3', '-3', '-2', '-2', '-1', '-1', '-1', '-', '-'],
-                                       ['-3', '-3', '-3', '-3', '-2', '-2', '-1', '-1', '-1', '-'],
-                                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
 
         if self.target_type_cbx.get() != 'Air Defense Track':
             result = advanced_strike_table[column][row]
@@ -322,17 +247,6 @@ class StrikeTable:
             row = 0
         if row > 7:
             row = 7
-
-        collateral_damage_table = [['Air', 'AmPt', '-', '-', '-', '-', '-', '-'],
-                                   ['Air*', 'Air', 'AmPt', '-', '-', '-', '-', '-'],
-                                   ['Air*', 'Air*', 'Air', 'AmPt', '-', '-', '-', '-'],
-                                   ['Air AmPt', 'Air AmPt', 'Air', 'Air', '-', '-', '-', '-'],
-                                   ['Air* Air AmPt', 'Air* AmPt', 'Air AmPt', 'Air', 'Air', '-', '-', '-'],
-                                   ['Air* Air AmPt', 'Air* Air AmPt', 'Air* AmPt', 'Air AmPt', 'Air', 'Air', 'Air',
-                                    '-'],
-                                   ['Step', 'Step', '-', '-', '-', '-', '-', '-'],
-                                   ['Elim', 'Step', 'Step', '-', '-', '-', '-', '-'],
-                                   ['Elim', 'Elim', 'Step', 'Step', '-', '-', '-', '-']]
 
         result = collateral_damage_table[column][row]
         self.d10_coll_ent.insert(END, str(d10_coll))
