@@ -1,85 +1,88 @@
-from tkinter import Label, IntVar, BooleanVar
+from tkinter import Label, IntVar, BooleanVar, Toplevel
 from tkinter import Entry
 from tkinter import Button
 from tkinter import END
-from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
 from air_2_air_constants import Air_Combat_Result_dogfight, Air_Combat_Result_long
 
 
-class AirToAirCombatTable:
-    def __init__(self, win):
+class AirToAirCombatTable(Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
 
-        self.attacker_value_lbl = Label(win, text='Attacker:')
-        self.attacker_value_cbx = Combobox(win, values=('1', '2', '3', '4', '5', '6'), width=5)
-        self.defender_value_lbl = Label(win, text='Defender:')
-        self.defender_value_cbx = Combobox(win, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
-        self.attacker_pilot_skills_lbl = Label(win, text='Pilot skills:')
-        self.attacker_pilot_skills_cbx = Combobox(win, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
-        self.defender_pilot_skills_lbl = Label(win, text='Pilot skills')
-        self.defender_pilot_skills_cbx = Combobox(win, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+        self.title('Advanced Air Warfare Calculator')
+        self.geometry("600x400+10+10")
 
-        self.distance_lbl = Label(win, text='Distance:')
+        self.attacker_value_lbl = Label(self, text='Attacker:')
+        self.attacker_value_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6'), width=5)
+        self.defender_value_lbl = Label(self, text='Defender:')
+        self.defender_value_cbx = Combobox(self, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
+        self.attacker_pilot_skills_lbl = Label(self, text='Pilot skills:')
+        self.attacker_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+        self.defender_pilot_skills_lbl = Label(self, text='Pilot skills')
+        self.defender_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+
+        self.distance_lbl = Label(self, text='Distance:')
         self.actual_distance = IntVar()
         self.actual_distance.set(1)
-        self.distance_r1 = Radiobutton(win, text="Long Range", variable=self.actual_distance,
+        self.distance_r1 = Radiobutton(self, text="Long Range", variable=self.actual_distance,
                                        value=1, command=partial(self.skill_active, self.actual_distance))
-        self.distance_r2 = Radiobutton(win, text="Stand-off", variable=self.actual_distance,
+        self.distance_r2 = Radiobutton(self, text="Stand-off", variable=self.actual_distance,
                                        value=2, command=partial(self.skill_active, self.actual_distance))
-        self.distance_r3 = Radiobutton(win, text="Dogfight", variable=self.actual_distance,
+        self.distance_r3 = Radiobutton(self, text="Dogfight", variable=self.actual_distance,
                                        value=3, command=partial(self.skill_active, self.actual_distance))
 
-        self.weather_lbl = Label(win, text='Weather:')
+        self.weather_lbl = Label(self, text='Weather:')
         self.actual_weather = IntVar()
         self.actual_weather.set(1)
-        self.weather_r1 = Radiobutton(win, text="Clear", variable=self.actual_weather, value=1)
-        self.weather_r2 = Radiobutton(win, text="Overcast", variable=self.actual_weather, value=2)
-        self.weather_r3 = Radiobutton(win, text="Storm", variable=self.actual_weather, value=3)
+        self.weather_r1 = Radiobutton(self, text="Clear", variable=self.actual_weather, value=1)
+        self.weather_r2 = Radiobutton(self, text="Overcast", variable=self.actual_weather, value=2)
+        self.weather_r3 = Radiobutton(self, text="Storm", variable=self.actual_weather, value=3)
 
-        self.attacker_d10_lbl = Label(win, text='dice d10:')
+        self.attacker_d10_lbl = Label(self, text='dice d10:')
 
-        self.attacker_drm_lbl = Label(win, text='DRMs:')
+        self.attacker_drm_lbl = Label(self, text='DRMs:')
 
-        self.attacker_result_lbl = Label(win, text='Result:')
+        self.attacker_result_lbl = Label(self, text='Result:')
 
-        self.defender_d10_lbl = Label(win, text='dice d10:')
+        self.defender_d10_lbl = Label(self, text='dice d10:')
 
-        self.defender_drm_lbl = Label(win, text='DRMs:')
+        self.defender_drm_lbl = Label(self, text='DRMs:')
 
-        self.defender_result_lbl = Label(win, text='Result:')
+        self.defender_result_lbl = Label(self, text='Result:')
 
         self.not_mutual = BooleanVar()
         self.not_mutual.set(False)
-        self.not_mutual_chk = Checkbutton(win, text='not mutual firing', variable=self.not_mutual)
+        self.not_mutual_chk = Checkbutton(self, text='not mutual firing', variable=self.not_mutual)
 
         self.not_proper_att = BooleanVar()
         self.not_proper_att.set(False)
-        self.not_proper_att_chk = Checkbutton(win, text='not NATO/US/JPN/PRC', variable=self.not_proper_att,
+        self.not_proper_att_chk = Checkbutton(self, text='not NATO/US/JPN/PRC', variable=self.not_proper_att,
                                               state='disabled')
 
         self.strike_att = BooleanVar()
         self.strike_att.set(False)
-        self.strike_att_chk = Checkbutton(win, text='CS firing', variable=self.strike_att)
+        self.strike_att_chk = Checkbutton(self, text='CS firing', variable=self.strike_att)
 
         self.strike_def = BooleanVar()
         self.strike_def.set(False)
-        self.strike_def_chk = Checkbutton(win, text='CS firing', variable=self.strike_def)
+        self.strike_def_chk = Checkbutton(self, text='CS firing', variable=self.strike_def)
 
         self.not_proper_def = BooleanVar()
         self.not_proper_def.set(False)
-        self.not_proper_def_chk = Checkbutton(win, text='not NATO/US/JPN/PRC',
+        self.not_proper_def_chk = Checkbutton(self, text='not NATO/US/JPN/PRC',
                                               variable=self.not_proper_def, state='disabled')
 
-        self.air_2_air_btn = Button(win, text='Calculate', command=self.calculate_a2a)
+        self.air_2_air_btn = Button(self, text='Calculate', command=self.calculate_a2a)
 
-        self.result_att_ent = Entry(width=7)
-        self.d10_att_ent = Entry(width=7)
-        self.DRM_att_ent = Entry(width=7)
-        self.d10_def_ent = Entry(width=7)
-        self.DRM_def_ent = Entry(width=7)
-        self.result_def_ent = Entry(width=7)
+        self.result_att_ent = Entry(self, width=7)
+        self.d10_att_ent = Entry(self, width=7)
+        self.DRM_att_ent = Entry(self, width=7)
+        self.d10_def_ent = Entry(self, width=7)
+        self.DRM_def_ent = Entry(self, width=7)
+        self.result_def_ent = Entry(self, width=7)
 
         self.attacker_value_lbl.place(x=50, y=40)
         self.attacker_pilot_skills_lbl.place(x=50, y=80)
@@ -237,10 +240,3 @@ class AirToAirCombatTable:
         self.not_proper_def.set(False)
         self.strike_def.set(False)
         self.not_mutual.set(False)
-
-
-window = Tk()
-mywin = AirToAirCombatTable(window)
-window.title('Advanced Air Warfare Calculator')
-window.geometry("600x400+10+10")
-window.mainloop()

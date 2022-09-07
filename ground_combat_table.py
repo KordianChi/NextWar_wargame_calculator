@@ -1,4 +1,4 @@
-from tkinter import Label, BooleanVar
+from tkinter import Label, BooleanVar, Toplevel
 from tkinter import Entry
 from tkinter import Button
 from tkinter import END
@@ -10,73 +10,78 @@ from ground_combat_constants import combat_result_table, terrain_to_type, terrai
     odds_to_column
 
 
-class CombatResultTable:
-    def __init__(self, win):
+class CombatResultTable(Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.title('Combat Result Table')
+        self.geometry("1500x600+10+10")
+
         self.attacker_number = 0
         self.defender_number = 0
         self.y_for_attacker = 50
         self.y_for_defender = 50
         self.attacker_data = []
         self.defender_data = []
-        self.clear_all_btn = Button(win, text='Clear all', command=self.clear)
+        self.clear_all_btn = Button(self, text='Clear all', command=self.clear)
         self.clear_all_btn.place(x=970, y=550)
-        self.add_attacker_btn = Button(win, text='Add attacker', command=self.add_attacker)
+        self.add_attacker_btn = Button(self, text='Add attacker', command=self.add_attacker)
         self.add_attacker_btn.place(x=10, y=10)
-        self.attacker_efficiency_lbl = Label(win, text='Attacker efficiency:')
+        self.attacker_efficiency_lbl = Label(self, text='Attacker efficiency:')
         self.attacker_efficiency_lbl.place(x=100, y=10)
-        self.attacker_efficiency_cbx = Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
+        self.attacker_efficiency_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.attacker_efficiency_cbx.set('1')
         self.attacker_efficiency_cbx.place(x=210, y=10)
-        self.add_defender_btn = Button(win, text='Add defender', command=self.add_defender)
+        self.add_defender_btn = Button(self, text='Add defender', command=self.add_defender)
         self.add_defender_btn.place(x=450, y=10)
-        self.defender_efficiency_lbl = Label(win, text='Defender efficiency:')
+        self.defender_efficiency_lbl = Label(self, text='Defender efficiency:')
         self.defender_efficiency_lbl.place(x=540, y=10)
-        self.defender_efficiency_cbx = Combobox(win, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
+        self.defender_efficiency_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.defender_efficiency_cbx.set('1')
         self.defender_efficiency_cbx.place(x=655, y=10)
 
-        self.attacker_hq_lbl = Label(win, text='Attacker HQ:')
+        self.attacker_hq_lbl = Label(self, text='Attacker HQ:')
         self.attacker_hq_lbl.place(x=260, y=10)
-        self.attacker_hq_cbx = Combobox(win, values=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'), width=4)
+        self.attacker_hq_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'), width=4)
         self.attacker_hq_cbx.set('0')
         self.attacker_hq_cbx.place(x=340, y=10)
 
-        self.defender_hq_lbl = Label(win, text='Defender HQ:')
+        self.defender_hq_lbl = Label(self, text='Defender HQ:')
         self.defender_hq_lbl.place(x=705, y=10)
-        self.defender_hq_cbx = Combobox(win, values=('0', '1', '2', '3', '4', '5'), width=4)
+        self.defender_hq_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5'), width=4)
         self.defender_hq_cbx.set('0')
         self.defender_hq_cbx.place(x=785, y=10)
 
-        self.calculate_power_btn = Button(win, text='Combat values', command=self.calculate)
+        self.calculate_power_btn = Button(self, text='Combat values', command=self.calculate)
         self.calculate_power_btn.place(x=970, y=520)
 
-        self.calculate_att_lbl = Label(win, text='Att value:')
+        self.calculate_att_lbl = Label(self, text='Att value:')
         self.calculate_att_lbl.place(x=1070, y=520)
-        self.calculate_att_ent = Entry(width=5)
+        self.calculate_att_ent = Entry(self, width=5)
         self.calculate_att_ent.insert(END, '0')
         self.calculate_att_ent.place(x=1140, y=520)
 
-        self.calculate_def_lbl = Label(win, text='Def value:')
+        self.calculate_def_lbl = Label(self, text='Def value:')
         self.calculate_def_lbl.place(x=1180, y=520)
-        self.calculate_def_ent = Entry(width=5)
+        self.calculate_def_ent = Entry(self, width=5)
         self.calculate_def_ent.insert(END, '0')
         self.calculate_def_ent.place(x=1250, y=520)
 
-        self.calculate_col_shift_lbl = Label(win, text='Shift:')
+        self.calculate_col_shift_lbl = Label(self, text='Shift:')
         self.calculate_col_shift_lbl.place(x=1290, y=520)
-        self.calculate_col_shift_ent = Entry(width=5)
+        self.calculate_col_shift_ent = Entry(self, width=5)
         self.calculate_col_shift_ent.insert(END, '0')
         self.calculate_col_shift_ent.place(x=1330, y=520)
 
-        self.calculate_drm_lbl = Label(win, text='DRM:')
+        self.calculate_drm_lbl = Label(self, text='DRM:')
         self.calculate_drm_lbl.place(x=1370, y=520)
-        self.calculate_drm_ent = Entry(width=5)
+        self.calculate_drm_ent = Entry(self, width=5)
         self.calculate_drm_ent.insert(END, '0')
         self.calculate_drm_ent.place(x=1410, y=520)
 
-        self.terrain_lbl = Label(win, text='Terrain Type:')
+        self.terrain_lbl = Label(self, text='Terrain Type:')
         self.terrain_lbl.place(x=870, y=10)
-        self.terrain_cbx = Combobox(win, values=('Flat', 'Flat Woods', 'Rough', 'Rough Woods', 'Marsh',
+        self.terrain_cbx = Combobox(self, values=('Flat', 'Flat Woods', 'Rough', 'Rough Woods', 'Marsh',
                                                  'Highlands', 'Jungle', 'Highland Woods',
                                                  'Mountain', 'Urban'), width=15)
         self.terrain_cbx.set('Flat')
@@ -84,152 +89,152 @@ class CombatResultTable:
 
         self.in_city = BooleanVar()
         self.in_city.set(False)
-        self.in_city_chk = Checkbutton(win, text='Defender in city', variable=self.in_city)
+        self.in_city_chk = Checkbutton(self, text='Defender in city', variable=self.in_city)
         self.in_city_chk.place(x=970, y=40)
 
         self.across_river = BooleanVar()
         self.across_river.set(False)
-        self.across_river_chk = Checkbutton(win, text='Attack across river', variable=self.across_river)
+        self.across_river_chk = Checkbutton(self, text='Attack across river', variable=self.across_river)
         self.across_river_chk.place(x=970, y=70)
 
         self.is_fortified = BooleanVar()
         self.is_fortified.set(False)
-        self.is_fortified_chk = Checkbutton(win, text='Defender is fortified', variable=self.is_fortified)
+        self.is_fortified_chk = Checkbutton(self, text='Defender is fortified', variable=self.is_fortified)
         self.is_fortified_chk.place(x=970, y=100)
 
         self.amphibious_assault = BooleanVar()
         self.amphibious_assault.set(False)
-        self.amphibious_assault_chk = Checkbutton(win, text='Amphibious assault', variable=self.amphibious_assault)
+        self.amphibious_assault_chk = Checkbutton(self, text='Amphibious assault', variable=self.amphibious_assault)
         self.amphibious_assault_chk.place(x=970, y=130)
 
         self.exploit_combat = BooleanVar()
         self.exploit_combat.set(False)
-        self.exploit_combat_chk = Checkbutton(win, text='Exploit combat', variable=self.exploit_combat)
+        self.exploit_combat_chk = Checkbutton(self, text='Exploit combat', variable=self.exploit_combat)
         self.exploit_combat_chk.place(x=970, y=160)
 
-        self.surprise_lbl = Label(win, text='Surprise:')
+        self.surprise_lbl = Label(self, text='Surprise:')
         self.surprise_lbl.place(x=970, y=190)
-        self.surprise_cbx = Combobox(win, values=('0', '1', '2'), width=4)
+        self.surprise_cbx = Combobox(self, values=('0', '1', '2'), width=4)
         self.surprise_cbx.set('0')
         self.surprise_cbx.place(x=1080, y=190)
 
-        self.attacker_arty_lbl = Label(win, text='Attacker artillery:')
+        self.attacker_arty_lbl = Label(self, text='Attacker artillery:')
         self.attacker_arty_lbl.place(x=970, y=220)
-        self.attacker_arty_cbx = Combobox(win, values=('0', '1', '2'), width=4)
+        self.attacker_arty_cbx = Combobox(self, values=('0', '1', '2'), width=4)
         self.attacker_arty_cbx.set('0')
         self.attacker_arty_cbx.place(x=1080, y=220)
 
-        self.defender_arty_lbl = Label(win, text='Defender artillery:')
+        self.defender_arty_lbl = Label(self, text='Defender artillery:')
         self.defender_arty_lbl.place(x=970, y=250)
-        self.defender_arty_cbx = Combobox(win, values=('0', '1'), width=4)
+        self.defender_arty_cbx = Combobox(self, values=('0', '1'), width=4)
         self.defender_arty_cbx.set('0')
         self.defender_arty_cbx.place(x=1080, y=250)
 
-        self.attacker_helos_lbl = Label(win, text='Attacker Helos:')
+        self.attacker_helos_lbl = Label(self, text='Attacker Helos:')
         self.attacker_helos_lbl.place(x=970, y=280)
-        self.attacker_1_helos_cbx = Combobox(win, values=('0', '1', '2'), width=4)
+        self.attacker_1_helos_cbx = Combobox(self, values=('0', '1', '2'), width=4)
         self.attacker_1_helos_cbx.set('0')
         self.attacker_1_helos_cbx.place(x=1080, y=280)
-        self.attacker_2_helos_cbx = Combobox(win, values=('0', '1', '2'), width=4)
+        self.attacker_2_helos_cbx = Combobox(self, values=('0', '1', '2'), width=4)
         self.attacker_2_helos_cbx.set('0')
         self.attacker_2_helos_cbx.place(x=1080, y=310)
-        self.defender_helos_lbl = Label(win, text='Defender Helos:')
+        self.defender_helos_lbl = Label(self, text='Defender Helos:')
         self.defender_helos_lbl.place(x=970, y=340)
-        self.defender_helos_cbx = Combobox(win, values=('0', '1', '2'), width=4)
+        self.defender_helos_cbx = Combobox(self, values=('0', '1', '2'), width=4)
         self.defender_helos_cbx.set('0')
         self.defender_helos_cbx.place(x=1080, y=340)
 
-        self.attacker_aircraft_lbl = Label(win, text='Attacker Aircraft:')
+        self.attacker_aircraft_lbl = Label(self, text='Attacker Aircraft:')
         self.attacker_aircraft_lbl.place(x=970, y=370)
-        self.attacker_1_aircraft_cbx = Combobox(win, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
+        self.attacker_1_aircraft_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
         self.attacker_1_aircraft_cbx.set('0')
         self.attacker_1_aircraft_cbx.place(x=1080, y=370)
-        self.attacker_2_aircraft_cbx = Combobox(win, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
+        self.attacker_2_aircraft_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
         self.attacker_2_aircraft_cbx.set('0')
         self.attacker_2_aircraft_cbx.place(x=1080, y=400)
-        self.defender_aircraft_lbl = Label(win, text='Defender Aircraft:')
+        self.defender_aircraft_lbl = Label(self, text='Defender Aircraft:')
         self.defender_aircraft_lbl.place(x=970, y=430)
-        self.defender_aircraft_cbx = Combobox(win, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
+        self.defender_aircraft_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6'), width=4)
         self.defender_aircraft_cbx.set('0')
         self.defender_aircraft_cbx.place(x=1080, y=430)
 
-        self.attacker_navy_lbl = Label(win, text='Attacker Navy:')
+        self.attacker_navy_lbl = Label(self, text='Attacker Navy:')
         self.attacker_navy_lbl.place(x=970, y=460)
-        self.attacker_navy_ent = Entry(width=7)
+        self.attacker_navy_ent = Entry(self, width=7)
         self.attacker_navy_ent.insert(END, '0')
         self.attacker_navy_ent.place(x=1080, y=460)
 
-        self.defender_navy_lbl = Label(win, text='Defender Navy:')
+        self.defender_navy_lbl = Label(self, text='Defender Navy:')
         self.defender_navy_lbl.place(x=970, y=490)
-        self.defender_navy_ent = Entry(width=7)
+        self.defender_navy_ent = Entry(self, width=7)
         self.defender_navy_ent.insert(END, '0')
         self.defender_navy_ent.place(x=1080, y=490)
 
         self.attacking_5_6_side = BooleanVar()
         self.attacking_5_6_side.set(False)
-        self.attacking_5_6_side_chk = Checkbutton(win, text='Attack from 5 or 6 hex', variable=self.attacking_5_6_side)
+        self.attacking_5_6_side_chk = Checkbutton(self, text='Attack from 5 or 6 hex', variable=self.attacking_5_6_side)
         self.attacking_5_6_side_chk.place(x=1150, y=10)
 
         self.attacking_3_4_side = BooleanVar()
         self.attacking_3_4_side.set(False)
-        self.attacking_3_4_side_chk = Checkbutton(win, text='Attack from 3 or 4 hex', variable=self.attacking_3_4_side)
+        self.attacking_3_4_side_chk = Checkbutton(self, text='Attack from 3 or 4 hex', variable=self.attacking_3_4_side)
         self.attacking_3_4_side_chk.place(x=1150, y=40)
 
         self.defender_in_installation = BooleanVar()
         self.defender_in_installation.set(False)
-        self.defender_in_installation_chk = Checkbutton(win, text='Defender in installation/airfield/town',
+        self.defender_in_installation_chk = Checkbutton(self, text='Defender in installation/airfield/town',
                                                         variable=self.defender_in_installation)
         self.defender_in_installation_chk.place(x=1150, y=70)
 
-        self.multi_formation_lbl = Label(win, text='Multi-formation:')
+        self.multi_formation_lbl = Label(self, text='Multi-formation:')
         self.multi_formation_lbl.place(x=1150, y=100)
-        self.multi_formation_ent = Entry(width=7)
+        self.multi_formation_ent = Entry(self, width=7)
         self.multi_formation_ent.insert(END, '0')
         self.multi_formation_ent.place(x=1250, y=100)
 
         self.multi_nation_attack = BooleanVar()
         self.multi_nation_attack.set(False)
-        self.multi_nation_attack_chk = Checkbutton(win, text='Multination attack', variable=self.multi_nation_attack)
+        self.multi_nation_attack_chk = Checkbutton(self, text='Multination attack', variable=self.multi_nation_attack)
         self.multi_nation_attack_chk.place(x=1150, y=130)
 
         self.irop_prc_attack = BooleanVar()
         self.irop_prc_attack.set(False)
-        self.irop_prc_attack_chk = Checkbutton(win, text='IROP & PRC attack', variable=self.irop_prc_attack)
+        self.irop_prc_attack_chk = Checkbutton(self, text='IROP & PRC attack', variable=self.irop_prc_attack)
         self.irop_prc_attack_chk.place(x=1150, y=160)
 
         self.attacker_cyber_shift = BooleanVar()
         self.attacker_cyber_shift.set(False)
-        self.attacker_cyber_shift_chk = Checkbutton(win, text='Attacker Cyber Warfare',
+        self.attacker_cyber_shift_chk = Checkbutton(self, text='Attacker Cyber Warfare',
                                                     variable=self.attacker_cyber_shift)
         self.attacker_cyber_shift_chk.place(x=1150, y=190)
 
         self.defender_cyber_shift = BooleanVar()
         self.defender_cyber_shift.set(False)
-        self.defender_cyber_shift_chk = Checkbutton(win, text='Defender Cyber Warfare',
+        self.defender_cyber_shift_chk = Checkbutton(self, text='Defender Cyber Warfare',
                                                     variable=self.defender_cyber_shift)
         self.defender_cyber_shift_chk.place(x=1150, y=220)
 
-        self.combat_result_btn = Button(win, text='Combat Result', command=self.combat_result)
+        self.combat_result_btn = Button(self, text='Combat Result', command=self.combat_result)
         self.combat_result_btn.place(x=1150, y=280)
 
-        self.combat_odds_lbl = Label(win, text='Combat odds:')
+        self.combat_odds_lbl = Label(self, text='Combat odds:')
         self.combat_odds_lbl.place(x=1150, y=320)
-        self.combat_odds_ent = Entry(width=7)
+        self.combat_odds_ent = Entry(self, width=7)
         self.combat_odds_ent.place(x=1250, y=320)
 
-        self.combat_result_lbl = Label(win, text='Combat result:')
+        self.combat_result_lbl = Label(self, text='Combat result:')
         self.combat_result_lbl.place(x=1150, y=360)
-        self.combat_result_ent = Entry(width=7)
+        self.combat_result_ent = Entry(self, width=7)
         self.combat_result_ent.place(x=1250, y=360)
 
-        self.reduce_attacker_loss_lbl = Label(win, text='Reduce loss:')
+        self.reduce_attacker_loss_lbl = Label(self, text='Reduce loss:')
         self.reduce_attacker_loss_lbl.place(x=1150, y=400)
-        self.reduce_attacker_loss_ent = Entry(width=7)
+        self.reduce_attacker_loss_ent = Entry(self, width=7)
         self.reduce_attacker_loss_ent.place(x=1250, y=400)
 
-        self.result_dice_lbl = Label(win, text='Dice:')
+        self.result_dice_lbl = Label(self, text='Dice:')
         self.result_dice_lbl.place(x=1150, y=440)
-        self.result_dice_ent = Entry(width=7)
+        self.result_dice_ent = Entry(self, width=7)
         self.result_dice_ent.place(x=1250, y=440)
 
     def add_attacker(self):
@@ -542,8 +547,3 @@ class CombatResultTable:
         self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
 
 
-window = Tk()
-mywin = CombatResultTable(window)
-window.title('Combat Result Table')
-window.geometry("1500x600+10+10")
-window.mainloop()

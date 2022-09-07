@@ -1,135 +1,137 @@
-from tkinter import Label, IntVar, BooleanVar
+from tkinter import Label, IntVar, BooleanVar, Toplevel
 from tkinter import Entry
 from tkinter import Button
 from tkinter import END
-from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from air_defense_constants import detection_to_column, advanced_detection_table, sam_value_to_column, advanced_sam_table,\
     aaa_value_to_column, advanced_aaa_table
 
 
-class AirCombatTable:
-    def __init__(self, win):
+class AirCombatTable(Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.title('Advanced Air Warfare Calculator')
+        self.geometry("650x650+10+10")
 
-        self.lbl4 = Label(win, text='Weather:')
-        self.lbl10 = Label(win, text='Detection:')
-        self.cb3 = Combobox(win, values=('Local', '0-1', '2-3', '4', '5', '6', '7', '8', '9', '10'), width=5)
+        self.lbl4 = Label(self, text='Weather:')
+        self.lbl10 = Label(self, text='Detection:')
+        self.cb3 = Combobox(self, values=('Local', '0-1', '2-3', '4', '5', '6', '7', '8', '9', '10'), width=5)
         self.cb3.set('Local')
-        self.lbl11 = Label(win, text='AWACS adv:')
-        self.cb4 = Combobox(win, values=('0-1', '2', '3', '4'), width=5)
+        self.lbl11 = Label(self, text='AWACS adv:')
+        self.cb4 = Combobox(self, values=('0-1', '2', '3', '4'), width=5)
         self.cb4.set('0-1')
-        self.lbl12 = Label(win, text='Wild Weasel:')
-        self.cb5 = Combobox(win, values=('0', '1', '2'), width=5)
+        self.lbl12 = Label(self, text='Wild Weasel:')
+        self.cb5 = Combobox(self, values=('0', '1', '2'), width=5)
         self.cb5.set('0')
-        self.lbl13 = Label(win, text='DRMs:')
-        self.lbl14 = Label(win, text='dice d10:')
-        self.lbl15 = Label(win, text='Result:')
-        self.lbl16 = Label(win, text='SAM value:')
-        self.cb6 = Combobox(win, values=('Local', '0-1', '2', '3-4', '5-6', '7', '8', '9', '10'), width=5)
+        self.lbl13 = Label(self, text='DRMs:')
+        self.lbl14 = Label(self, text='dice d10:')
+        self.lbl15 = Label(self, text='Result:')
+        self.lbl16 = Label(self, text='SAM value:')
+        self.cb6 = Combobox(self, values=('Local', '0-1', '2', '3-4', '5-6', '7', '8', '9', '10'), width=5)
         self.cb6.set('Local')
-        self.lbl18 = Label(win, text='DRMs:')
-        self.lbl19 = Label(win, text='dice d10:')
-        self.lbl20 = Label(win, text='Result:')
-        self.lbl21 = Label(win, text='AAA value:')
-        self.cb8 = Combobox(win, values=('Local', '0-1', '2', '3'), width=5)
+        self.lbl18 = Label(self, text='DRMs:')
+        self.lbl19 = Label(self, text='dice d10:')
+        self.lbl20 = Label(self, text='Result:')
+        self.lbl21 = Label(self, text='AAA value:')
+        self.cb8 = Combobox(self, values=('Local', '0-1', '2', '3'), width=5)
         self.cb8.set('Local')
-        self.lbl22 = Label(win, text='DRMs:')
-        self.lbl23 = Label(win, text='dice d10:')
-        self.lbl24 = Label(win, text='Result:')
+        self.lbl22 = Label(self, text='DRMs:')
+        self.lbl23 = Label(self, text='dice d10:')
+        self.lbl24 = Label(self, text='Result:')
 
-        self.btn2 = Button(win, text='Calculate', command=self.calculate_detection)
-        self.btn3 = Button(win, text='Calculate', command=self.sam_defence)
-        self.btn4 = Button(win, text='Calculate', command=self.aaa_defence)
+        self.btn2 = Button(self, text='Calculate', command=self.calculate_detection)
+        self.btn3 = Button(self, text='Calculate', command=self.sam_defence)
+        self.btn4 = Button(self, text='Calculate', command=self.aaa_defence)
 
-        self.t6 = Entry(width=7)
-        self.t7 = Entry(width=7)
-        self.t8 = Entry(width=7)
-        self.t9 = Entry(width=7)
-        self.t10 = Entry(width=7)
-        self.t11 = Entry(width=7)
-        self.t12 = Entry(width=7)
-        self.t13 = Entry(width=7)
-        self.t14 = Entry(width=7)
+        self.t6 = Entry(self, width=7)
+        self.t7 = Entry(self, width=7)
+        self.t8 = Entry(self, width=7)
+        self.t9 = Entry(self, width=7)
+        self.t10 = Entry(self, width=7)
+        self.t11 = Entry(self, width=7)
+        self.t12 = Entry(self, width=7)
+        self.t13 = Entry(self, width=7)
+        self.t14 = Entry(self, width=7)
 
         self.actual_weather = IntVar()
         self.actual_weather.set(1)
 
-        self.r4 = Radiobutton(win, text="Clear", variable=self.actual_weather, value=1)
-        self.r5 = Radiobutton(win, text="Overcast", variable=self.actual_weather, value=2)
-        self.r6 = Radiobutton(win, text="Storm", variable=self.actual_weather, value=3)
+        self.r4 = Radiobutton(self, text="Clear", variable=self.actual_weather, value=1)
+        self.r5 = Radiobutton(self, text="Overcast", variable=self.actual_weather, value=2)
+        self.r6 = Radiobutton(self, text="Storm", variable=self.actual_weather, value=3)
 
         self.near_HQ = BooleanVar()
         self.near_HQ.set(False)
-        self.c6 = Checkbutton(win, text='Target near HQ', variable=self.near_HQ)
+        self.c6 = Checkbutton(self, text='Target near HQ', variable=self.near_HQ)
 
         self.passed_occ = BooleanVar()
         self.passed_occ.set(False)
-        self.c7 = Checkbutton(win, text='Passed through occupied hex', variable=self.passed_occ)
+        self.c7 = Checkbutton(self, text='Passed through occupied hex', variable=self.passed_occ)
 
         self.vs_helos = BooleanVar()
         self.vs_helos.set(False)
-        self.c8 = Checkbutton(win, text='vs Attack Helos', variable=self.vs_helos)
+        self.c8 = Checkbutton(self, text='vs Attack Helos', variable=self.vs_helos)
 
         self.EZOC_landing = BooleanVar()
         self.EZOC_landing.set(False)
-        self.c9 = Checkbutton(win, text='Landing in EZOC', variable=self.EZOC_landing)
+        self.c9 = Checkbutton(self, text='Landing in EZOC', variable=self.EZOC_landing)
 
         self.vs_para = BooleanVar()
         self.vs_para.set(False)
-        self.c10 = Checkbutton(win, text='vs Transport/Paradrop/CAS', variable=self.vs_para)
+        self.c10 = Checkbutton(self, text='vs Transport/Paradrop/CAS', variable=self.vs_para)
 
         self.mountain = BooleanVar()
         self.mountain.set(False)
-        self.c11 = Checkbutton(win, text='Mission in mountain', variable=self.mountain)
+        self.c11 = Checkbutton(self, text='Mission in mountain', variable=self.mountain)
 
         self.cruise = BooleanVar()
         self.cruise.set(False)
-        self.c12 = Checkbutton(win, text='vs Cruise Missle', variable=self.cruise)
+        self.c12 = Checkbutton(self, text='vs Cruise Missle', variable=self.cruise)
 
         self.stealth = BooleanVar()
         self.stealth.set(False)
-        self.c13 = Checkbutton(win, text='solely Stealth mission', variable=self.stealth)
+        self.c13 = Checkbutton(self, text='solely Stealth mission', variable=self.stealth)
 
         self.SAM_HQ = BooleanVar()
         self.SAM_HQ.set(False)
-        self.c14 = Checkbutton(win, text='Target near HQ', variable=self.SAM_HQ)
+        self.c14 = Checkbutton(self, text='Target near HQ', variable=self.SAM_HQ)
 
         self.helo_over_enemy = BooleanVar()
         self.helo_over_enemy.set(False)
-        self.c15 = Checkbutton(win, text='Helo flew over enemy', variable=self.helo_over_enemy)
+        self.c15 = Checkbutton(self, text='Helo flew over enemy', variable=self.helo_over_enemy)
 
         self.sam_vs_cruise = BooleanVar()
         self.sam_vs_cruise.set(False)
-        self.c16 = Checkbutton(win, text='SAM vs Cruise Missile', variable=self.sam_vs_cruise)
+        self.c16 = Checkbutton(self, text='SAM vs Cruise Missile', variable=self.sam_vs_cruise)
 
         self.sam_vs_stealth = BooleanVar()
         self.sam_vs_stealth.set(False)
-        self.c17 = Checkbutton(win, text='SAM vs Stealth', variable=self.sam_vs_stealth)
+        self.c17 = Checkbutton(self, text='SAM vs Stealth', variable=self.sam_vs_stealth)
 
-        self.lbl17 = Label(win, text='Wild Weasel')
-        self.cb7 = Combobox(win, values=('0', '1', '2'), width=5)
+        self.lbl17 = Label(self, text='Wild Weasel')
+        self.cb7 = Combobox(self, values=('0', '1', '2'), width=5)
         self.cb7.set('0')
 
         self.aaa_vs_helos = BooleanVar()
         self.aaa_vs_helos.set(False)
-        self.c18 = Checkbutton(win, text='AAA vs Helos', variable=self.aaa_vs_helos)
+        self.c18 = Checkbutton(self, text='AAA vs Helos', variable=self.aaa_vs_helos)
 
         self.ciws = BooleanVar()
         self.ciws.set(False)
-        self.c19 = Checkbutton(win, text='CIWS', variable=self.ciws)
+        self.c19 = Checkbutton(self, text='CIWS', variable=self.ciws)
 
         self.usn_ciws = BooleanVar()
         self.usn_ciws.set(False)
-        self.c20 = Checkbutton(win, text='USN CIWS', variable=self.usn_ciws)
+        self.c20 = Checkbutton(self, text='USN CIWS', variable=self.usn_ciws)
 
         self.aaa_vs_transport = BooleanVar()
         self.aaa_vs_transport.set(False)
-        self.c21 = Checkbutton(win, text='AAA vs Transport', variable=self.aaa_vs_transport)
+        self.c21 = Checkbutton(self, text='AAA vs Transport', variable=self.aaa_vs_transport)
 
         self.aaa_vs_stealth = BooleanVar()
         self.aaa_vs_stealth.set(False)
-        self.c22 = Checkbutton(win, text='AAA vs Stealth', variable=self.aaa_vs_stealth)
+        self.c22 = Checkbutton(self, text='AAA vs Stealth', variable=self.aaa_vs_stealth)
 
         self.lbl10.place(x=50, y=40)
         self.lbl11.place(x=50, y=80)
@@ -301,10 +303,3 @@ class AirCombatTable:
         self.t12.insert(END, str(DRM))
         self.t13.insert(END, str(d10))
         self.t14.insert(END, result)
-
-
-window = Tk()
-mywin = AirCombatTable(window)
-window.title('Advanced Air Warfare Calculator')
-window.geometry("650x650+10+10")
-window.mainloop()

@@ -1,8 +1,7 @@
-from tkinter import Label, IntVar, BooleanVar
+from tkinter import Label, IntVar, BooleanVar, Toplevel
 from tkinter import Entry
 from tkinter import Button
 from tkinter import END
-from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
@@ -10,81 +9,85 @@ from sof_constants import raid_result_table, recon_result_table, targeting_resul
     recon_types, raid_types, recon_table, raid_table
 
 
-class SofTable:
+class SofTable(Toplevel):
 
-    def __init__(self, win):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.title('SOF Calculator')
+        self.geometry("500x500+10+10")
 
         self.mission_type = IntVar()
         self.mission_type.set(0)
-        self.mission_type_rbtn_1 = Radiobutton(win, text='Recon', variable=self.mission_type, value=0,
+        self.mission_type_rbtn_1 = Radiobutton(self, text='Recon', variable=self.mission_type, value=0,
                                                command=partial(self.raid_recon_active, self.mission_type))
-        self.mission_type_rbtn_2 = Radiobutton(win, text='Raid', variable=self.mission_type, value=1,
+        self.mission_type_rbtn_2 = Radiobutton(self, text='Raid', variable=self.mission_type, value=1,
                                                command=partial(self.raid_recon_active, self.mission_type))
 
-        self.terrain_type_cbx = Combobox(win, values=terrain_types, width=30)
+        self.terrain_type_cbx = Combobox(self, values=terrain_types, width=30)
         self.terrain_type_cbx.set('Flat/Rough/Marsh')
 
-        self.recon_mission_target_cbx = Combobox(win, values=recon_types, width=30)
+        self.recon_mission_target_cbx = Combobox(self, values=recon_types, width=30)
         self.recon_mission_target_cbx.set('HQ')
 
-        self.raid_mission_target_cbx = Combobox(win, values=raid_types, width=30)
+        self.raid_mission_target_cbx = Combobox(self, values=raid_types, width=30)
         self.raid_mission_target_cbx.set('HQ')
         self.raid_mission_target_cbx.config(state='disabled')
 
-        self.raid_drms_lbl = Label(win, text='Raid DRMs:')
+        self.raid_drms_lbl = Label(self, text='Raid DRMs:')
 
         self.storm = BooleanVar()
         self.storm.set(False)
-        self.storm_chk = Checkbutton(win, text='Storm', variable=self.storm, state='disabled')
+        self.storm_chk = Checkbutton(self, text='Storm', variable=self.storm, state='disabled')
 
         self.bridge = BooleanVar()
         self.bridge.set(False)
-        self.bridge_chk = Checkbutton(win, text='vs bridge', variable=self.bridge, state='disabled')
+        self.bridge_chk = Checkbutton(self, text='vs bridge', variable=self.bridge, state='disabled')
 
         self.city = BooleanVar()
         self.city.set(False)
-        self.city_chk = Checkbutton(win, text='hex contain city', variable=self.city, state='disabled')
+        self.city_chk = Checkbutton(self, text='hex contain city', variable=self.city, state='disabled')
 
         self.naval = BooleanVar()
         self.naval.set(False)
-        self.naval_chk = Checkbutton(win, text='vs Naval unit', variable=self.naval, state='disabled')
+        self.naval_chk = Checkbutton(self, text='vs Naval unit', variable=self.naval, state='disabled')
 
         self.less_brigade = BooleanVar()
         self.less_brigade.set(False)
-        self.less_brigade_chk = Checkbutton(win, text='occupied less than brigade',
+        self.less_brigade_chk = Checkbutton(self, text='occupied less than brigade',
                                             variable=self.less_brigade, state='disabled')
 
         self.least_brigade = BooleanVar()
         self.least_brigade.set(False)
-        self.least_brigade_chk = Checkbutton(win, text='occupied at least brigade',
+        self.least_brigade_chk = Checkbutton(self, text='occupied at least brigade',
                                              variable=self.least_brigade, state='disabled')
         self.sam_or_theater = BooleanVar()
         self.sam_or_theater.set(False)
-        self.sam_or_theater_chk = Checkbutton(win, text='vs SAM or theater',
+        self.sam_or_theater_chk = Checkbutton(self, text='vs SAM or theater',
                                               variable=self.sam_or_theater, state='disabled')
 
         self.us_uk = BooleanVar()
         self.us_uk.set(False)
-        self.us_uk_chk = Checkbutton(win, text='US/UK unit', variable=self.us_uk)
+        self.us_uk_chk = Checkbutton(self, text='US/UK unit', variable=self.us_uk)
 
         self.allied = BooleanVar()
         self.allied.set(False)
-        self.allied_chk = Checkbutton(win, text='non-US/UK allied unit', variable=self.allied)
+        self.allied_chk = Checkbutton(self, text='non-US/UK allied unit', variable=self.allied)
 
-        self.surprise_lbl = Label(win, text='Surprise')
-        self.surprise_cbx = Combobox(win, values=('0', '1', '2'), width=5)
+        self.surprise_lbl = Label(self, text='Surprise')
+        self.surprise_cbx = Combobox(self, values=('0', '1', '2'), width=5)
         self.surprise_cbx.set('0')
-        self.survive_drm_lbl = Label(win, text='Survive DRMs')
+        self.survive_drm_lbl = Label(self, text='Survive DRMs')
 
-        self.calculate_btn = Button(win, text='Calculate', command=self.calculate_result)
-        self.result_d10_lbl = Label(win, text='Result d10:')
-        self.result_d10_ent = Entry(width=8)
-        self.result_lbl = Label(win, text='Result:')
+        self.calculate_btn = Button(self, text='Calculate', command=self.calculate_result)
+        self.result_d10_lbl = Label(self, text='Result d10:')
+        self.result_d10_ent = Entry(self, width=8)
+        self.result_lbl = Label(self, text='Result:')
         self.result_ent = Entry(width=8)
-        self.survive_d10_lbl = Label(win, text='Survive d10:')
-        self.survive_d10_ent = Entry(width=8)
-        self.survive_lbl = Label(win, text='Survive:')
-        self.survive_ent = Entry(width=8)
+        self.survive_d10_lbl = Label(self, text='Survive d10:')
+        self.survive_d10_ent = Entry(self, width=8)
+        self.survive_lbl = Label(self, text='Survive:')
+        self.survive_ent = Entry(self, width=8)
 
         self.mission_type_rbtn_1.place(x=50, y=40)
         self.mission_type_rbtn_2.place(x=150, y=40)
@@ -212,10 +215,3 @@ class SofTable:
         self.survive_ent.insert(END, survive)
         self.result_d10_ent.insert(END, str(d10_result))
         self.result_ent.insert(END, result)
-
-
-window = Tk()
-mywin = SofTable(window)
-window.title('SOF Calculator')
-window.geometry("500x500+10+10")
-window.mainloop()
