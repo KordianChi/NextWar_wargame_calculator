@@ -2,7 +2,6 @@ from tkinter import Label, BooleanVar, Toplevel
 from tkinter import Entry
 from tkinter import Button
 from tkinter import END
-from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
@@ -15,42 +14,42 @@ class CombatResultTable(Toplevel):
         super().__init__(parent)
 
         self.title('Combat Result Table')
-        self.geometry("550x1000+10+10")
+        self.geometry("850x600+10+10")
 
-        self.attacker_number = 0
-        self.defender_number = 0
-        self.y_for_attacker = 770
-        self.y_for_defender = 620
+        self.attacker_number = 1
+        self.defender_number = 1
+        self.y_for_attacker = 280
+        self.y_for_defender = 40
         self.attacker_data = []
         self.defender_data = []
         self.clear_all_btn = Button(self, text='Clear all', command=self.clear)
         self.clear_all_btn.place(x=20, y=550)
         self.add_attacker_btn = Button(self, text='Add attacker', command=self.add_attacker)
-        self.add_attacker_btn.place(x=20, y=740)
+        self.add_attacker_btn.place(x=420, y=250)
         self.attacker_efficiency_lbl = Label(self, text='Attacker efficiency:')
-        self.attacker_efficiency_lbl.place(x=110, y=740)
+        self.attacker_efficiency_lbl.place(x=510, y=250)
         self.attacker_efficiency_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.attacker_efficiency_cbx.set('1')
-        self.attacker_efficiency_cbx.place(x=225, y=740)
+        self.attacker_efficiency_cbx.place(x=625, y=250)
         self.add_defender_btn = Button(self, text='Add defender', command=self.add_defender)
-        self.add_defender_btn.place(x=20, y=590)
+        self.add_defender_btn.place(x=420, y=10)
         self.defender_efficiency_lbl = Label(self, text='Defender efficiency:')
-        self.defender_efficiency_lbl.place(x=110, y=590)
+        self.defender_efficiency_lbl.place(x=510, y=10)
         self.defender_efficiency_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6', '7', '8'), width=4)
         self.defender_efficiency_cbx.set('1')
-        self.defender_efficiency_cbx.place(x=225, y=590)
+        self.defender_efficiency_cbx.place(x=625, y=10)
 
         self.attacker_hq_lbl = Label(self, text='Attacker HQ:')
-        self.attacker_hq_lbl.place(x=275, y=740)
+        self.attacker_hq_lbl.place(x=675, y=250)
         self.attacker_hq_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'), width=4)
         self.attacker_hq_cbx.set('0')
-        self.attacker_hq_cbx.place(x=355, y=740)
+        self.attacker_hq_cbx.place(x=755, y=250)
 
         self.defender_hq_lbl = Label(self, text='Defender HQ:')
-        self.defender_hq_lbl.place(x=275, y=590)
+        self.defender_hq_lbl.place(x=675, y=10)
         self.defender_hq_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5'), width=4)
         self.defender_hq_cbx.set('0')
-        self.defender_hq_cbx.place(x=355, y=590)
+        self.defender_hq_cbx.place(x=755, y=10)
 
         self.calculate_power_btn = Button(self, text='Combat values', command=self.calculate)
         self.calculate_power_btn.place(x=20, y=520)
@@ -68,16 +67,16 @@ class CombatResultTable(Toplevel):
         self.calculate_def_ent.place(x=300, y=520)
 
         self.calculate_col_shift_lbl = Label(self, text='Shift:')
-        self.calculate_col_shift_lbl.place(x=340, y=520)
+        self.calculate_col_shift_lbl.place(x=120, y=550)
         self.calculate_col_shift_ent = Entry(self, width=5)
         self.calculate_col_shift_ent.insert(END, '0')
-        self.calculate_col_shift_ent.place(x=380, y=520)
+        self.calculate_col_shift_ent.place(x=190, y=550)
 
         self.calculate_drm_lbl = Label(self, text='DRM:')
-        self.calculate_drm_lbl.place(x=420, y=520)
+        self.calculate_drm_lbl.place(x=230, y=550)
         self.calculate_drm_ent = Entry(self, width=5)
         self.calculate_drm_ent.insert(END, '0')
-        self.calculate_drm_ent.place(x=460, y=520)
+        self.calculate_drm_ent.place(x=300, y=550)
 
         self.terrain_cbx = Combobox(self, values=('Flat', 'Flat Woods', 'Rough', 'Rough Woods', 'Marsh',
                                                  'Highlands', 'Jungle', 'Highland Woods',
@@ -237,19 +236,19 @@ class CombatResultTable(Toplevel):
 
     def add_attacker(self):
         attacker_lbl = Label(self, text=f'Attacker #{self.attacker_number}')
-        attacker_lbl.place(x=20, y=self.y_for_attacker)
+        attacker_lbl.place(x=420, y=self.y_for_attacker)
         attack_value_ent = Entry(self, width=5)
         attack_value_ent.insert(END, '0')
-        attack_value_ent.place(x=95, y=self.y_for_attacker)
+        attack_value_ent.place(x=495, y=self.y_for_attacker)
         attacker_type_cbx = Combobox(self, values=('Leg', 'Mechanized', 'Armored', 'Mtn', 'Light'), width=12)
         attacker_type_cbx.set('Leg')
-        attacker_type_cbx.place(x=155, y=self.y_for_attacker)
+        attacker_type_cbx.place(x=555, y=self.y_for_attacker)
         attacker_supply_cbx = Combobox(self, values=('In-supply', 'Out-supply', 'Isolated'), width=10)
         attacker_supply_cbx.set('In-supply')
-        attacker_supply_cbx.place(x=255, y=self.y_for_attacker)
+        attacker_supply_cbx.place(x=655, y=self.y_for_attacker)
         attacker_strike_cbx = Combobox(self, values=('No Strike', 'Strike 1', 'Strike 2'), width=8)
         attacker_strike_cbx.set('No strike')
-        attacker_strike_cbx.place(x=355, y=self.y_for_attacker)
+        attacker_strike_cbx.place(x=755, y=self.y_for_attacker)
         self.attacker_data.append([attacker_lbl, attack_value_ent, attacker_type_cbx,
                                    attacker_supply_cbx, attacker_strike_cbx])
         self.attacker_number += 1
@@ -257,27 +256,27 @@ class CombatResultTable(Toplevel):
 
     def add_defender(self):
         defender_lbl = Label(self, text=f'Defender #{self.defender_number}')
-        defender_lbl.place(x=20, y=self.y_for_defender)
+        defender_lbl.place(x=420, y=self.y_for_defender)
         defender_value_ent = Entry(self, width=5)
         defender_value_ent.insert(END, '0')
-        defender_value_ent.place(x=95, y=self.y_for_defender)
+        defender_value_ent.place(x=495, y=self.y_for_defender)
         defender_type_cbx = Combobox(self, values=('Leg', 'Mechanized', 'Armored', 'Mtn', 'Light'), width=12)
         defender_type_cbx.set('Leg')
-        defender_type_cbx.place(x=155, y=self.y_for_defender)
+        defender_type_cbx.place(x=555, y=self.y_for_defender)
         defender_supply_cbx = Combobox(self, values=('In-supply', 'Out-supply', 'Isolated'), width=10)
         defender_supply_cbx.set('In-supply')
-        defender_supply_cbx.place(x=255, y=self.y_for_defender)
+        defender_supply_cbx.place(x=655, y=self.y_for_defender)
         defender_strike_cbx = Combobox(self, values=('No Strike', 'Strike 1', 'Strike 2'), width=8)
         defender_strike_cbx.set('No strike')
-        defender_strike_cbx.place(x=355, y=self.y_for_defender)
+        defender_strike_cbx.place(x=755, y=self.y_for_defender)
         self.defender_data.append([defender_lbl, defender_value_ent, defender_type_cbx,
                                    defender_supply_cbx, defender_strike_cbx])
         self.defender_number += 1
         self.y_for_defender += 30
 
     def clear(self):
-        self.y_for_defender = 620
-        self.y_for_attacker = 770
+        self.y_for_defender = 40
+        self.y_for_attacker = 280
         self.calculate_att_ent.delete(0, 'end')
         self.calculate_att_ent.insert(END, '0')
         self.calculate_def_ent.delete(0, 'end')
@@ -300,8 +299,8 @@ class CombatResultTable(Toplevel):
                 widget.destroy()
         self.attacker_data = []
         self.defender_data = []
-        self.attacker_number = 0
-        self.defender_number = 0
+        self.attacker_number = 1
+        self.defender_number = 1
 
     def calculate(self):
         self.calculate_drm_ent.delete(0, 'end')

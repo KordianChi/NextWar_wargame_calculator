@@ -12,7 +12,7 @@ class ClearingOperation(Toplevel):
         super().__init__(parent)
 
         self.title('Clearing Operation')
-        self.geometry("400x270+10+10")
+        self.geometry("240x350+10+10")
 
         self.terrain_type_lbl = Label(self, text='Terrain:')
         self.terrain_type_cbx = Combobox(self, values=('Urban', 'City', 'Instalation'), width=10)
@@ -52,15 +52,15 @@ class ClearingOperation(Toplevel):
         self.clearing_number_cbx.place(x=100, y=80)
         self.stack_points_lbl.place(x=10, y=110)
         self.stack_points_ent.place(x=100, y=110)
-        self.clearing_btn.place(x=10, y=140)
-        self.clearing_d10_lbl.place(x=10, y=170)
-        self.clearing_d10_ent.place(x=100, y=170)
-        self.clearing_result_lbl.place(x=10, y=200)
-        self.clearing_result_ent.place(x=100, y=200)
-        self.loss_result_lbl.place(x=10, y=230)
-        self.loss_result_ent.place(x=100, y=230)
-        self.paradrop_chk.place(x=200, y=20)
-        self.combined_arms_chk.place(x=200, y=50)
+        self.clearing_btn.place(x=10, y=200)
+        self.clearing_d10_lbl.place(x=10, y=230)
+        self.clearing_d10_ent.place(x=100, y=230)
+        self.clearing_result_lbl.place(x=10, y=260)
+        self.clearing_result_ent.place(x=100, y=260)
+        self.loss_result_lbl.place(x=10, y=290)
+        self.loss_result_ent.place(x=100, y=290)
+        self.paradrop_chk.place(x=10, y=140)
+        self.combined_arms_chk.place(x=10, y=170)
 
     def clearing(self):
         self.clearing_d10_ent.delete(0, 'end')
