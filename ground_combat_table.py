@@ -6,8 +6,8 @@ from tkinter import Tk
 from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
-from ground_combat_constants import combat_result_table, terrain_to_type, terrain_to_shift, frac_to_order, order_to_frac,\
-    odds_to_column
+from constants import COMBAT_RESULT_TABLE, TERRAIN_TO_TYPE, TERRAIN_TO_SHIFT, FRAC_TO_ORDER,\
+    ORDER_TO_FRAC, ODDS_TO_COLUMN
 
 
 class CombatResultTable(Toplevel):
@@ -450,8 +450,8 @@ class CombatResultTable(Toplevel):
     def combat_result(self):
 
         terrain = self.terrain_cbx.get()
-        shift = terrain_to_shift[terrain]
-        terrain_type = terrain_to_type[terrain]
+        shift = TERRAIN_TO_SHIFT[terrain]
+        terrain_type = TERRAIN_TO_TYPE[terrain]
         self.combat_result_ent.delete(0, 'end')
         self.combat_odds_ent.delete(0, 'end')
         self.reduce_attacker_loss_ent.delete(0, 'end')
@@ -477,50 +477,50 @@ class CombatResultTable(Toplevel):
 
         if 2 > frac >= 1.5:
             att_res_pure = 1.5
-            order_pure = frac_to_order[att_res_pure]
+            order_pure = FRAC_TO_ORDER[att_res_pure]
             order = order_pure + mod
             if order > terrain_type:
                 order = terrain_type
             if order < -2:
                 order = -2
             if order > 0:
-                att_res = order_to_frac[order]
+                att_res = ORDER_TO_FRAC[order]
                 defe_res = 1
             else:
-                defe_res = order_to_frac[order]
+                defe_res = ORDER_TO_FRAC[order]
                 att_res = 1
         else:
             if frac > 0:
                 att_res_pure = floor(frac)
 
-                order_pure = frac_to_order[att_res_pure]
+                order_pure = FRAC_TO_ORDER[att_res_pure]
                 order = order_pure + mod
                 if order > terrain_type:
                     order = terrain_type
                 if order < -2:
                     order = -2
                 if order > 0:
-                    att_res = order_to_frac[order]
+                    att_res = ORDER_TO_FRAC[order]
                     defe_res = 1
                 else:
-                    defe_res = order_to_frac[order]
+                    defe_res = ORDER_TO_FRAC[order]
                     att_res = 1
             else:
                 if frac > -2:
                     defe_res_pure = -2
                 else:
                     defe_res_pure = -3
-                order_pure = frac_to_order[defe_res_pure]
+                order_pure = FRAC_TO_ORDER[defe_res_pure]
                 order = order_pure + mod
                 if order > terrain_type:
                     order = terrain_type
                 if order < -2:
                     order = -2
                 if order > 0:
-                    att_res = order_to_frac[order]
+                    att_res = ORDER_TO_FRAC[order]
                     defe_res = 1
                 else:
-                    defe_res = order_to_frac[order]
+                    defe_res = ORDER_TO_FRAC[order]
                     att_res = 1
         dice = randint(0, 9)
         row = dice + int(self.calculate_drm_ent.get())
@@ -531,7 +531,7 @@ class CombatResultTable(Toplevel):
             row = -3
         row = row + 3
         odds = str(att_res) + ':' + str(defe_res)
-        column = odds_to_column[odds]
+        column = ODDS_TO_COLUMN[odds]
         column += shift
         column -= 1
 
@@ -541,7 +541,7 @@ class CombatResultTable(Toplevel):
 
         self.result_dice_ent.insert(END, str(dice))
         self.combat_odds_ent.insert(END, odds)
-        self.combat_result_ent.insert(END, str(combat_result_table[column][row]))
+        self.combat_result_ent.insert(END, str(COMBAT_RESULT_TABLE[column][row]))
         self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
 
 

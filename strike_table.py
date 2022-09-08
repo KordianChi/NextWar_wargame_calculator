@@ -5,8 +5,8 @@ from tkinter import END
 from tkinter import Toplevel
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
-from strike_constants import attacker_types, target_types, strike_table_no_air, strike_table_air_only, air_attacker,\
-    advanced_strike_table, advanced_strike_table_vs_aa, collateral_damage_table
+from constants import ATTACKER_TYPES, TARGET_TYPES, STRIKE_TABLE_NO_AIR, STRIKE_TABLE_AIR_ONLY, AIR_ATTACKER, \
+    ADVANCED_STRIKE_TABLE, ADVANCED_STRIKE_TABLE_VS_AA, COLLATERAL_DAMAGE_TABLE
 
 
 class StrikeTable(Toplevel):
@@ -18,7 +18,7 @@ class StrikeTable(Toplevel):
         self.geometry("600x600+10+10")
 
         self.attacker_type_lbl = Label(self, text='Attacker type:')
-        self.attacker_type_cbx = Combobox(self, values=attacker_types, width=10)
+        self.attacker_type_cbx = Combobox(self, values=ATTACKER_TYPES, width=10)
         self.attacker_type_cbx.set('Air Strike')
 
         self.air_strike_value_lbl = Label(self, text='Air Strike Value:')
@@ -26,7 +26,7 @@ class StrikeTable(Toplevel):
         self.air_strike_value_cbx.set('1')
         self.target_type_lbl = Label(self, text='Target type:')
 
-        self.target_type_cbx = Combobox(self, values=target_types, width=30)
+        self.target_type_cbx = Combobox(self, values=TARGET_TYPES, width=30)
         self.target_type_cbx.set('Marsh/Flat')
 
         self.target_over_stacked = BooleanVar()
@@ -174,10 +174,10 @@ class StrikeTable(Toplevel):
         self.strike_drm_ent.delete(0, 'end')
 
         if self.attacker_type_cbx.get() != 'Air Strike':
-            target = strike_table_no_air[self.attacker_type_cbx.get()]
+            target = STRIKE_TABLE_NO_AIR[self.attacker_type_cbx.get()]
             column = target[self.target_type_cbx.get()]
         else:
-            target = strike_table_air_only[self.air_strike_value_cbx.get()]
+            target = STRIKE_TABLE_AIR_ONLY[self.air_strike_value_cbx.get()]
             column = target[self.target_type_cbx.get()]
 
         d10_strike = randint(0, 9)
@@ -210,7 +210,7 @@ class StrikeTable(Toplevel):
         drm_strike += int(self.pilot_skills_cbx.get())
         if self.actual_weather == 3:
             drm_strike += 3
-        if self.actual_weather == 2 and self.attacker_type_cbx.get() in air_attacker:
+        if self.actual_weather == 2 and self.attacker_type_cbx.get() in AIR_ATTACKER:
             drm_strike += 2
         row = d10_strike + drm_strike
         if row < -2:
@@ -219,9 +219,9 @@ class StrikeTable(Toplevel):
             row = 7
 
         if self.target_type_cbx.get() != 'Air Defense Track':
-            result = advanced_strike_table[column][row]
+            result = ADVANCED_STRIKE_TABLE[column][row]
         else:
-            result = advanced_strike_table_vs_aa[column][row]
+            result = ADVANCED_STRIKE_TABLE_VS_AA[column][row]
 
         self.strike_result_ent.insert(END, result)
         self.strike_d10_ent.insert(END, str(d10_strike))
@@ -252,6 +252,6 @@ class StrikeTable(Toplevel):
         if row > 7:
             row = 7
 
-        result = collateral_damage_table[column][row]
+        result = COLLATERAL_DAMAGE_TABLE[column][row]
         self.d10_coll_ent.insert(END, str(d10_coll))
         self.collateral_damage_ent.insert(END, result)

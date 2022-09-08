@@ -4,7 +4,7 @@ from tkinter import Button
 from tkinter import END
 from tkinter.ttk import Combobox, Checkbutton
 from random import randint
-from cyber_warfare_constants import mission_to_number, cyber_warfare_table
+from constants import MISSION_TO_NUMBER, CYBER_WARFARE_TABLE
 
 
 class CyberWarfareTable(Toplevel):
@@ -16,7 +16,7 @@ class CyberWarfareTable(Toplevel):
 
         self.cwc_mission_lbl = Label(self, text='Mission:')
         self.cwc_mission_cbx = Combobox(self, values=('UN Resolution', 'Electronic Detection', 'Air Superiority',
-                                                     'Strike Phase', 'Ground Combat'), width=18)
+                                                      'Strike Phase', 'Ground Combat'), width=18)
         self.cwc_mission_cbx.set('Ground Combat')
         self.cwc_attack_lbl = Label(self, text='CW Attacker:')
         self.cwc_attack_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6', '7'), width=4)
@@ -64,8 +64,8 @@ class CyberWarfareTable(Toplevel):
         self.defender_survive_ent.delete(0, 'end')
         self.result_ent.delete(0, 'end')
 
-        mission_number = mission_to_number[self.cwc_mission_cbx.get()]
-        row = cyber_warfare_table[mission_number]
+        mission_number = MISSION_TO_NUMBER[self.cwc_mission_cbx.get()]
+        row = CYBER_WARFARE_TABLE[mission_number]
         attack_value = int(self.cwc_attack_cbx.get()) - int(self.cwc_defend_cbx.get())
         if attack_value < 0:
             attack_value = 0
@@ -99,5 +99,3 @@ class CyberWarfareTable(Toplevel):
         self.attack_survive_ent.insert(END, att_survive)
         self.defender_survive_ent.insert(END, def_survive)
         self.result_ent.insert(END, result)
-
-

@@ -5,7 +5,7 @@ from tkinter import END
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
-from air_2_air_constants import Air_Combat_Result_dogfight, Air_Combat_Result_long
+from constants import AIR_COMBAT_RESULT_DOGFIGHT, AIR_COMBAT_RESULT_LONG
 
 
 class AirToAirCombatTable(Toplevel):
@@ -179,9 +179,9 @@ class AirToAirCombatTable(Toplevel):
         row_att += 2
 
         if self.actual_distance.get() == 3:
-            result_att = Air_Combat_Result_dogfight[column_att][row_att]
+            result_att = AIR_COMBAT_RESULT_DOGFIGHT[column_att][row_att]
         else:
-            result_att = Air_Combat_Result_long[column_att][row_att]
+            result_att = AIR_COMBAT_RESULT_LONG[column_att][row_att]
 
         vs_bomber = target == 0
 
@@ -220,9 +220,9 @@ class AirToAirCombatTable(Toplevel):
             row_def += 2
 
             if self.actual_distance.get() == 3:
-                result_def = Air_Combat_Result_dogfight[column_def][row_def]
+                result_def = AIR_COMBAT_RESULT_DOGFIGHT[column_def][row_def]
             else:
-                result_def = Air_Combat_Result_long[column_def][row_def]
+                result_def = AIR_COMBAT_RESULT_LONG[column_def][row_def]
         else:
             d10_def = '-'
             DRM_def = '-'

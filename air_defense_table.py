@@ -4,8 +4,8 @@ from tkinter import Button
 from tkinter import END
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
-from air_defense_constants import detection_to_column, advanced_detection_table, sam_value_to_column, advanced_sam_table,\
-    aaa_value_to_column, advanced_aaa_table
+from constants import DETECTION_TO_COLUMN, ADVANCED_DETECTION_TABLE, SAM_VALUE_TO_COLUMN,\
+    ADVANCED_SAM_TABLE, AAA_VALUE_TO_COLUMN, ADVANCED_AAA_TABLE
 
 
 class AirCombatTable(Toplevel):
@@ -194,7 +194,7 @@ class AirCombatTable(Toplevel):
         self.t7.delete(0, 'end')
         self.t8.delete(0, 'end')
         detection_value = self.cb3.get()
-        column = detection_to_column[detection_value]
+        column = DETECTION_TO_COLUMN[detection_value]
 
         d10 = randint(0, 9)
         awacs_to_num = {'0-1': 0, '2': -1, '3': -2, '4': -3}
@@ -229,7 +229,7 @@ class AirCombatTable(Toplevel):
             row = 0
         if row > 9:
             row = 9
-        result = advanced_detection_table[column][row]
+        result = ADVANCED_DETECTION_TABLE[column][row]
         self.t6.insert(END, str(DRM))
         self.t7.insert(END, str(d10))
         self.t8.insert(END, result)
@@ -240,7 +240,7 @@ class AirCombatTable(Toplevel):
         self.t10.delete(0, 'end')
         self.t11.delete(0, 'end')
 
-        column = sam_value_to_column[self.cb6.get()]
+        column = SAM_VALUE_TO_COLUMN[self.cb6.get()]
 
         d10 = randint(0, 9)
         DRM = 0
@@ -263,7 +263,7 @@ class AirCombatTable(Toplevel):
             row = 0
         if row > 10:
             row = 10
-        result = advanced_sam_table[column][row]
+        result = ADVANCED_SAM_TABLE[column][row]
         self.t9.insert(END, str(DRM))
         self.t10.insert(END, str(d10))
         self.t11.insert(END, result)
@@ -274,7 +274,7 @@ class AirCombatTable(Toplevel):
         self.t13.delete(0, 'end')
         self.t14.delete(0, 'end')
 
-        column = aaa_value_to_column[self.cb8.get()]
+        column = AAA_VALUE_TO_COLUMN[self.cb8.get()]
 
         d10 = randint(0, 9)
         DRM = 0
@@ -298,7 +298,7 @@ class AirCombatTable(Toplevel):
         if row > 9:
             row = 9
 
-        result = advanced_aaa_table[column][row]
+        result = ADVANCED_AAA_TABLE[column][row]
 
         self.t12.insert(END, str(DRM))
         self.t13.insert(END, str(d10))

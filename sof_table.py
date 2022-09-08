@@ -5,8 +5,8 @@ from tkinter import END
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from functools import partial
-from sof_constants import raid_result_table, recon_result_table, targeting_result, detection_result, terrain_types, \
-    recon_types, raid_types, recon_table, raid_table
+from constants import RAID_RESULT_TABLE, RECON_RESULT_TABLE, TARGETING_RESULT, DETECTION_RESULT, TERRAIN_TYPES, \
+    RECON_TYPES, RAID_TYPES, RECON_TABLE, RAID_TABLE
 
 
 class SofTable(Toplevel):
@@ -24,13 +24,13 @@ class SofTable(Toplevel):
         self.mission_type_rbtn_2 = Radiobutton(self, text='Raid', variable=self.mission_type, value=1,
                                                command=partial(self.raid_recon_active, self.mission_type))
 
-        self.terrain_type_cbx = Combobox(self, values=terrain_types, width=30)
+        self.terrain_type_cbx = Combobox(self, values=TERRAIN_TYPES, width=30)
         self.terrain_type_cbx.set('Flat/Rough/Marsh')
 
-        self.recon_mission_target_cbx = Combobox(self, values=recon_types, width=30)
+        self.recon_mission_target_cbx = Combobox(self, values=RECON_TYPES, width=30)
         self.recon_mission_target_cbx.set('HQ')
 
-        self.raid_mission_target_cbx = Combobox(self, values=raid_types, width=30)
+        self.raid_mission_target_cbx = Combobox(self, values=RAID_TYPES, width=30)
         self.raid_mission_target_cbx.set('HQ')
         self.raid_mission_target_cbx.config(state='disabled')
 
@@ -155,11 +155,11 @@ class SofTable(Toplevel):
             if row > 8:
                 row = 8
             if self.recon_mission_target_cbx.get() == 'Targeting':
-                result = targeting_result[row]
+                result = TARGETING_RESULT[row]
             else:
-                target = recon_table[self.recon_mission_target_cbx.get()]
+                target = RECON_TABLE[self.recon_mission_target_cbx.get()]
                 column = target[self.terrain_type_cbx.get()]
-                result = recon_result_table[column][row]
+                result = RECON_RESULT_TABLE[column][row]
 
         else:
             drm_raid = 0
@@ -183,12 +183,12 @@ class SofTable(Toplevel):
             if row > 8:
                 row = 8
             if self.raid_mission_target_cbx.get() == 'Detection/SAM/Theater Weapon':
-                result = detection_result[row]
+                result = DETECTION_RESULT[row]
             else:
-                target = raid_table[self.raid_mission_target_cbx.get()]
+                target = RAID_TABLE[self.raid_mission_target_cbx.get()]
                 column = target[self.terrain_type_cbx.get()]
 
-                result = raid_result_table[column][row]
+                result = RAID_RESULT_TABLE[column][row]
 
 # Check survive
         d10_survive = randint(0, 9)
