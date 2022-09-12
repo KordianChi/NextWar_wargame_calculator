@@ -5,7 +5,9 @@ from constants import NAVAL_ATTACK_TYPE_TO_ROW, ADVANCED_STRIKE_TABLE, NAVAL_ATT
 
 
 class NavalWarfare(Toplevel):
+
     def __init__(self, parent):
+
         super().__init__(parent)
 
         self.title('Advanced Naval Warfare Calculator')
@@ -105,6 +107,47 @@ class NavalWarfare(Toplevel):
         self.sea_control_result_lbl = Label(self, text='Sea control result:')
         self.sea_control_result_ent = Entry(self, width=10)
 
+        self.own_cv_sag_lbl = Label(self, text='Own CV/SAG:')
+        self.own_cv_sag_ent = Entry(self, width=7)
+
+        self.enemy_cv_sag_lbl = Label(self, text='Enemy CV/SAG:')
+        self.enemy_cv_sag_ent = Entry(self, width=7)
+
+        self.air_supremacy_lbl = Label(self, text='Air Supremacy:')
+        self.air_supremacy_cbx = Combobox(self, values=('-', 'Enemy', 'Own'), width=7)
+        self.air_supremacy_cbx.set('-')
+
+        self.cruise_contested_prc = BooleanVar()
+        self.cruise_contested_prc.set(False)
+        self.cruise_contested_prc_chk = Checkbutton(self, text='PRC cruise', variable=self.cruise_contested_prc)
+
+        self.cruise_contested_ph = BooleanVar()
+        self.cruise_contested_ph.set(False)
+        self.cruise_contested_ph_chk = Checkbutton(self, text='PH cruise', variable=self.cruise_contested_ph)
+
+        self.own_sub_move = BooleanVar()
+        self.own_sub_move.set(False)
+        self.own_sub_move_chk = Checkbutton(self, text='Allied submarine', variable=self.own_sub_move)
+
+        self.enemy_sub_move = BooleanVar()
+        self.enemy_sub_move.set(False)
+        self.enemy_sub_move_chk = Checkbutton(self, text='Non-allied submarine', variable=self.enemy_sub_move)
+
+        self.inshore_control_lbl = Label(self, text='Inshore Control:')
+        self.inshore_control_cbx = Combobox(self, values=('-', 'Enemy', 'Own'), width=7)
+        self.inshore_control_cbx.set('-')
+
+        self.naval_move_result_btn = Button(self, text='Move', command=self.contested_sea)
+
+        self.naval_move_d10_lbl = Label(self, text='d10:')
+        self.naval_move_d10_ent = Entry(self, width=7)
+
+        self.naval_move_drm_lbl = Label(self, text='Move DRM:')
+        self.naval_move_drm_ent = Entry(self, width=7)
+
+        self.naval_move_result_lbl = Label(self, text='Move Result:')
+        self.naval_move_result_ent = Entry(self, width=12)
+
         self.attack_type_cbx.place(x=120, y=10)
         self.attack_type_lbl.place(x=20, y=10)
         self.non_us_cruise_chk.place(x=20, y=40)
@@ -150,6 +193,25 @@ class NavalWarfare(Toplevel):
         self.sea_control_drm_ent.place(x=300, y=310)
         self.sea_control_result_lbl.place(x=200, y=340)
         self.sea_control_result_ent.place(x=300, y=340)
+        self.own_cv_sag_lbl.place(x=410, y=10)
+        self.own_cv_sag_ent.place(x=500, y=10)
+        self.enemy_cv_sag_lbl.place(x=410, y=40)
+        self.enemy_cv_sag_ent.place(x=500, y=40)
+        self.air_supremacy_lbl.place(x=410, y=70)
+        self.air_supremacy_cbx.place(x=500, y=70)
+        self.cruise_contested_prc_chk.place(x=410, y=100)
+        self.cruise_contested_ph_chk.place(x=410, y=130)
+        self.own_sub_move_chk.place(x=410, y=160)
+        self.enemy_sub_move_chk.place(x=410, y=190)
+        self.inshore_control_lbl.place(x=410, y=220)
+        self.inshore_control_cbx.place(x=500, y=220)
+        self.naval_move_result_btn.place(x=410, y=250)
+        self.naval_move_d10_lbl.place(x=410, y=280)
+        self.naval_move_d10_ent.place(x=500, y=280)
+        self.naval_move_drm_lbl.place(x=410, y=310)
+        self.naval_move_drm_ent.place(x=500, y=310)
+        self.naval_move_result_lbl.place(x=410, y=340)
+        self.naval_move_result_ent.place(x=500, y=340)
 
     def naval_strike(self):
 
@@ -233,3 +295,45 @@ class NavalWarfare(Toplevel):
         self.sea_control_d10_ent.insert(END, str(d10_control))
         self.sea_control_drm_ent.insert(END, str(drm_control))
         self.sea_control_result_ent.insert(END, str(result))
+
+    def contested_sea(self):
+
+        self.naval_move_d10_ent.delete(0, 'end')
+        self.naval_move_drm_ent.delete(0, 'end')
+        self.naval_move_result_ent.delete(0, 'end')
+
+        drm_move = 0
+        drm_move -= int(self.own_cv_sag_ent.get())
+        drm_move += int(self.enemy_cv_sag_ent.get())
+        
+        if self.cruise_contested_prc.get():
+            drm_move += 1
+        if self.cruise_contested_ph.get():
+            drm_move += 1
+        if self.own_sub_move:
+            drm_move -= 1
+        if self.enemy_sub_move:
+            drm_move += 1
+        if self.inshore_control_cbx.get() == 'Own':
+            drm_move -= 1
+        if self.inshore_control_cbx.get() == 'Enemy':
+            drm_move += 1
+        if self.air_supremacy_cbx.get() == 'Own':
+            drm_move -= 1
+        if self.air_supremacy_cbx.get() == 'Enemy':
+            drm_move += 1
+
+        d10_move = randint(0, 9)
+        move = d10_move + drm_move
+
+        if move > 8:
+            result = 'Abort/Strike 2'
+        elif move > 5:
+            result ='Abort/Strike 1'
+        else:
+            result = '-'
+
+        self.naval_move_d10_ent.insert(END, str(d10_move))
+        self.naval_move_drm_ent.insert(END, str(drm_move))
+        self.naval_move_result_ent.insert(END, str(result))
+
