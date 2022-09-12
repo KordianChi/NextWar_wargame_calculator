@@ -7,6 +7,7 @@ from cyber_warfare_table import CyberWarfareTable
 from ground_combat_table import CombatResultTable
 from sof_table import SofTable
 from strike_table import StrikeTable
+from naval_warfare import NavalWarfare
 
 class Calculator(Tk):
     def __init__(self):
@@ -61,4 +62,5 @@ class Calculator(Tk):
         window.grab_set()
 
     def naval(self):
-        pass
+        window = NavalWarfare(self)
+        window.grab_set()

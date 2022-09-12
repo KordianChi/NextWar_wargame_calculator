@@ -248,3 +248,14 @@ COLLATERAL_DAMAGE_TABLE = [['Air', 'AmPt', '-', '-', '-', '-', '-', '-'],
                            ['Step', 'Step', '-', '-', '-', '-', '-', '-'],
                            ['Elim', 'Step', 'Step', '-', '-', '-', '-', '-'],
                            ['Elim', 'Elim', 'Step', 'Step', '-', '-', '-', '-']]
+
+# Naval Warfare
+
+NAVAL_ATTACK_TYPE_TO_ROW = {'Air 2': 0, 'Air 3': 1, 'Air 4': 2, 'Air 5': 3, 'Air 6': 4, 'SCUD': 2, 'Cruise': 3,
+                            'Naval 1': 2, 'Naval 2': 3, 'Naval 3': 4, 'Sub 7': 3, 'Sub 6': 3, 'Sub 5': 2, 'Sub 4': 2}
+
+NAVAL_ATTACK_TYPE = ['Air 2', 'Air 3', 'Air 4', 'Air 5', 'Air 6', 'SCUD', 'Cruise', 'Naval 1', 'Naval 2',
+                     'Naval 3', 'Sub 7', 'Sub 6', 'Sub 5', 'Sub 4']
+
+AIR_ADV_SEA = {'-': 0, 'Allied Air Superiority': 1, 'Allied Air Supremacy': 2, 'Non-allied Air Superiority': -1,
+               'Non-allied Air Supremacy': -2}
