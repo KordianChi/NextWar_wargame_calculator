@@ -15,7 +15,7 @@ class StrikeTable(Toplevel):
         super().__init__(parent)
 
         self.title('Advanced Air Warfare Calculator')
-        self.geometry("420x550+10+10")
+        self.geometry("420x610+10+10")
 
         self.attacker_type_lbl = Label(self, text='Attacker type:')
         self.attacker_type_cbx = Combobox(self, values=ATTACKER_TYPES, width=10)
@@ -78,6 +78,7 @@ class StrikeTable(Toplevel):
         self.stand_off_vs_leg.set(False)
         self.stand_off_vs_leg_chk = Checkbutton(self, text='stand off vs leg unit', variable=self.stand_off_vs_leg)
 
+        self.targeted_value_lbl = Label(self, text='Targeted:')
         self.targeted_value_cbx = Combobox(self, values=('0', '-1', '-2'), width=5)
         self.targeted_value_cbx.set('0')
 
@@ -146,6 +147,8 @@ class StrikeTable(Toplevel):
         self.bridge_or_beachhead_chk.place(x=50, y=270)
         self.vs_enemy_aaa_chk.place(x=50, y=300)
         self.stand_off_vs_leg_chk.place(x=50, y=330)
+        self.russian_rocket_chk.place(x=50, y=360)
+        self.interceptor_vs_unit_chk.place(x=50, y=390)
 
         self.weather_lbl.place(x=250, y=90)
         self.clear_weather_rb.place(x=250, y=120)
@@ -160,22 +163,24 @@ class StrikeTable(Toplevel):
         self.strike_result_ent.place(x=325, y=300)
         self.strike_result_lbl.place(x=250, y=300)
 
-        self.aa_result_lbl.place(x=50, y=360)
-        self.aa_result_cbx.place(x=120, y=360)
-        self.pilot_skills_lbl.place(x=50, y=390)
-        self.pilot_skills_cbx.place(x=120, y=390)
+        self.aa_result_lbl.place(x=50, y=420)
+        self.aa_result_cbx.place(x=120, y=420)
+        self.targeted_value_lbl.place(x=200, y=420)
+        self.targeted_value_cbx.place(x=270, y=420)
+        self.pilot_skills_lbl.place(x=50, y=450)
+        self.pilot_skills_cbx.place(x=120, y=450)
 
-        self.damage_btn.place(x=200, y=420)
-        self.site_type_lbl.place(x=50, y=420)
-        self.site_type_cbx.place(x=102, y=420)
-        self.destroy_type_lbl.place(x=50, y=450)
-        self.destroy_type_cbx.place(x=102, y=450)
-        self.hardened_chk.place(x=50, y=480)
-        self.nuclear_chk.place(x=50, y=510)
-        self.d10_coll_ent.place(x=260, y=450)
-        self.d10_coll_lbl.place(x=200, y=450)
-        self.collateral_damage_ent.place(x=260, y=480)
-        self.collateral_damage_lbl.place(x=200, y=480)
+        self.damage_btn.place(x=200, y=480)
+        self.site_type_lbl.place(x=50, y=480)
+        self.site_type_cbx.place(x=102, y=480)
+        self.destroy_type_lbl.place(x=50, y=510)
+        self.destroy_type_cbx.place(x=102, y=510)
+        self.hardened_chk.place(x=50, y=510)
+        self.nuclear_chk.place(x=50, y=570)
+        self.d10_coll_ent.place(x=260, y=510)
+        self.d10_coll_lbl.place(x=200, y=510)
+        self.collateral_damage_ent.place(x=260, y=540)
+        self.collateral_damage_lbl.place(x=200, y=540)
 
     def calculate_strike(self):
 
@@ -192,11 +197,12 @@ class StrikeTable(Toplevel):
 
         d10_strike = randint(0, 9)
         drm_strike = 0
+        drm_strike += int(self.targeted_value_cbx.get())
         if self.target_over_stacked.get():
             drm_strike -= 2
         if self.high_mountain.get():
             drm_strike -= 2
-        if self.russian_rocket.get():
+        if self.russian_rocket.get() and self.attacker_type_cbx.get() == 'Artillery':
             drm_strike -= 1
         if self.ah_1_ww.get():
             drm_strike += 1
@@ -216,8 +222,12 @@ class StrikeTable(Toplevel):
             drm_strike += 3
         if self.stand_off_vs_leg.get():
             drm_strike += 3
-        drm_strike += int(self.aa_result_cbx.get())
-        drm_strike += int(self.pilot_skills_cbx.get())
+        if self.attacker_type_cbx.get() in AIR_ATTACKER:
+            drm_strike += int(self.aa_result_cbx.get())
+        if self.attacker_type_cbx.get() == 'Air Strike':
+            drm_strike += int(self.pilot_skills_cbx.get())
+        if self.interceptor_vs_unit.get() and self.attacker_type_cbx.get() == 'Air Strike':
+            drm_strike += 2
         if self.actual_weather == 3:
             drm_strike += 3
         if self.actual_weather == 2 and self.attacker_type_cbx.get() in AIR_ATTACKER:

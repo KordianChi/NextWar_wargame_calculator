@@ -6,7 +6,7 @@ from tkinter.ttk import Combobox, Checkbutton
 from math import ceil, floor
 from random import randint
 from constants import COMBAT_RESULT_TABLE, TERRAIN_TO_TYPE, TERRAIN_TO_SHIFT, FRAC_TO_ORDER,\
-    ORDER_TO_FRAC, ODDS_TO_COLUMN
+    ORDER_TO_FRAC, ODDS_TO_COLUMN, DEFENDER_RETREAT_CHANCE, ATTACKER_LOSS_TABLE, DEFENDER_LOSS_TABLE
 
 
 class CombatResultTable(Toplevel):
@@ -14,7 +14,7 @@ class CombatResultTable(Toplevel):
         super().__init__(parent)
 
         self.title('Combat Result Table')
-        self.geometry("850x600+10+10")
+        self.geometry("850x670+10+10")
 
         self.attacker_number = 1
         self.defender_number = 1
@@ -234,6 +234,24 @@ class CombatResultTable(Toplevel):
         self.result_dice_ent = Entry(self, width=7)
         self.result_dice_ent.place(x=300, y=440)
 
+        self.predict_btn = Button(self, text='Predict', command=self.combat_result_predict)
+        self.predict_btn.place(x=20, y=580)
+
+        self.attacker_pred_loss_lbl = Label(self, text='Predict att loss:')
+        self.attacker_pred_loss_ent = Entry(self, width=7)
+        self.defender_pred_loss_lbl = Label(self, text='Predict def loss:')
+        self.defender_pred_loss_ent = Entry(self, width=7)
+        self.defender_pred_retreat_lbl = Label(self, text='Retreat chance:')
+        self.defender_pred_retreat_ent = Entry(self, width=7)
+
+        self.attacker_pred_loss_lbl.place(x=70, y=580)
+        self.attacker_pred_loss_ent.place(x=160, y=580)
+        self.defender_pred_loss_lbl.place(x=70, y=610)
+        self.defender_pred_loss_ent.place(x=160, y=610)
+        self.defender_pred_retreat_lbl.place(x=70, y=640)
+        self.defender_pred_retreat_ent.place(x=160, y=640)
+
+
     def add_attacker(self):
         attacker_lbl = Label(self, text=f'Attacker #{self.attacker_number}')
         attacker_lbl.place(x=420, y=self.y_for_attacker)
@@ -373,6 +391,10 @@ class CombatResultTable(Toplevel):
             col_shift -= 1
         if self.exploit_combat.get():
             col_shift -= 2
+        if self.attacker_cyber_shift.get():
+            col_shift += 1
+        if self.defender_cyber_shift.get():
+            col_shift -= 1
         col_shift += int(self.surprise_cbx.get())
         col_shift += int(self.attacker_arty_cbx.get())
         col_shift -= int(self.defender_arty_cbx.get())
@@ -505,7 +527,7 @@ class CombatResultTable(Toplevel):
                     defe_res = ORDER_TO_FRAC[order]
                     att_res = 1
             else:
-                if frac > -2:
+                if frac >= -2:
                     defe_res_pure = -2
                 else:
                     defe_res_pure = -3
@@ -542,5 +564,109 @@ class CombatResultTable(Toplevel):
         self.combat_odds_ent.insert(END, odds)
         self.combat_result_ent.insert(END, str(COMBAT_RESULT_TABLE[column][row]))
         self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
+
+    def combat_result_predict(self):
+
+        terrain = self.terrain_cbx.get()
+        shift = TERRAIN_TO_SHIFT[terrain]
+        terrain_type = TERRAIN_TO_TYPE[terrain]
+        self.combat_result_ent.delete(0, 'end')
+        self.combat_odds_ent.delete(0, 'end')
+        self.reduce_attacker_loss_ent.delete(0, 'end')
+        self.result_dice_ent.delete(0, 'end')
+        att = int(self.calculate_att_ent.get())
+        defe = int(self.calculate_def_ent.get())
+        mod = int(self.calculate_col_shift_ent.get())
+        drm = int(self.calculate_drm_ent.get())
+
+        frac = max(min(att / defe, terrain_type), min(defe / att, 3))
+        if att < defe:
+            frac = -frac
+
+        if frac == 1.5:
+            rem = 0
+        else:
+            if frac > 0:
+                rem = frac - floor(frac)
+            else:
+                rem = 0
+        if rem > 0:
+            drm -= 1
+
+        if 2 > frac >= 1.5:
+            att_res_pure = 1.5
+            order_pure = FRAC_TO_ORDER[att_res_pure]
+            order = order_pure + mod
+            if order > terrain_type:
+                order = terrain_type
+            if order < -2:
+                order = -2
+            if order > 0:
+                att_res = ORDER_TO_FRAC[order]
+                defe_res = 1
+            else:
+                defe_res = ORDER_TO_FRAC[order]
+                att_res = 1
+        else:
+            if frac > 0:
+                att_res_pure = floor(frac)
+
+                order_pure = FRAC_TO_ORDER[att_res_pure]
+                order = order_pure + mod
+                if order > terrain_type:
+                    order = terrain_type
+                if order < -2:
+                    order = -2
+                if order > 0:
+                    att_res = ORDER_TO_FRAC[order]
+                    defe_res = 1
+                else:
+                    defe_res = ORDER_TO_FRAC[order]
+                    att_res = 1
+            else:
+                if frac > -2:
+                    defe_res_pure = -2
+                else:
+                    defe_res_pure = -3
+                order_pure = FRAC_TO_ORDER[defe_res_pure]
+                order = order_pure + mod
+                if order > terrain_type:
+                    order = terrain_type
+                if order < -2:
+                    order = -2
+                if order > 0:
+                    att_res = ORDER_TO_FRAC[order]
+                    defe_res = 1
+                else:
+                    defe_res = ORDER_TO_FRAC[order]
+                    att_res = 1
+
+        drm = int(self.calculate_drm_ent.get())
+        min_random_result = drm
+        max_random_result = drm + 9
+        # row normalization
+        if max_random_result > 12:
+            max_random_result = 12
+        if min_random_result < -3:
+            min_random_result = -3
+        min_row = min_random_result + 3
+        max_row = max_random_result + 3
+
+        odds = str(att_res) + ':' + str(defe_res)
+        column = ODDS_TO_COLUMN[odds]
+        column += shift
+        column -= 1
+
+        defender_loss = sum(DEFENDER_LOSS_TABLE[column][min_row:max_row]) / 10
+        attacker_loss = sum(ATTACKER_LOSS_TABLE[column][min_row:max_row]) / 10
+        defender_retreat = sum(DEFENDER_RETREAT_CHANCE[column][min_row:max_row]) / 10
+
+        self.attacker_pred_loss_ent.delete(0, 'end')
+        self.defender_pred_loss_ent.delete(0, 'end')
+        self.defender_pred_retreat_ent.delete(0, 'end')
+
+        self.attacker_pred_loss_ent.insert(END, str(attacker_loss))
+        self.defender_pred_loss_ent.insert(END, str(defender_loss))
+        self.defender_pred_retreat_ent.insert(END, str(defender_retreat))
 
 
