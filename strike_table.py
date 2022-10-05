@@ -6,7 +6,7 @@ from tkinter import Toplevel
 from tkinter.ttk import Combobox, Checkbutton, Radiobutton
 from random import randint
 from constants import ATTACKER_TYPES, TARGET_TYPES, STRIKE_TABLE_NO_AIR, STRIKE_TABLE_AIR_ONLY, AIR_ATTACKER, \
-    ADVANCED_STRIKE_TABLE, ADVANCED_STRIKE_TABLE_VS_AA, COLLATERAL_DAMAGE_TABLE
+    ADVANCED_STRIKE_TABLE, ADVANCED_STRIKE_TABLE_VS_AA, COLLATERAL_DAMAGE_TABLE, PREDICT_STRIKE_EFFECT
 
 
 class StrikeTable(Toplevel):
@@ -131,6 +131,9 @@ class StrikeTable(Toplevel):
         self.d10_coll_lbl = Label(self, text='d10:')
         self.d10_coll_ent = Entry(self, width=7)
 
+        self.predict_btn = Button(self, text='Predict', command=self.predict_strike_result)
+        self.predict_ent = Entry(self, width=6)
+
         self.attacker_type_lbl.place(x=50, y=30)
         self.attacker_type_cbx.place(x=135, y=30)
         self.air_strike_value_lbl.place(x=220, y=30)
@@ -155,13 +158,15 @@ class StrikeTable(Toplevel):
         self.overcast_weather_rb.place(x=250, y=150)
         self.storm_weather_rb.place(x=250, y=180)
 
-        self.strike_btn.place(x=250, y=210)
-        self.strike_d10_ent.place(x=325, y=240)
-        self.strike_d10_lbl.place(x=250, y=240)
-        self.strike_drm_ent.place(x=325, y=270)
-        self.strike_drm_lbl.place(x=250, y=270)
-        self.strike_result_ent.place(x=325, y=300)
-        self.strike_result_lbl.place(x=250, y=300)
+        self.strike_btn.place(x=250, y=240)
+        self.strike_d10_ent.place(x=325, y=270)
+        self.strike_d10_lbl.place(x=250, y=270)
+        self.strike_drm_ent.place(x=325, y=300)
+        self.strike_drm_lbl.place(x=250, y=300)
+        self.strike_result_ent.place(x=325, y=330)
+        self.strike_result_lbl.place(x=250, y=330)
+        self.predict_btn.place(x=250, y=210)
+        self.predict_ent.place(x=320, y=210)
 
         self.aa_result_lbl.place(x=50, y=420)
         self.aa_result_cbx.place(x=120, y=420)
@@ -175,7 +180,7 @@ class StrikeTable(Toplevel):
         self.site_type_cbx.place(x=102, y=480)
         self.destroy_type_lbl.place(x=50, y=510)
         self.destroy_type_cbx.place(x=102, y=510)
-        self.hardened_chk.place(x=50, y=510)
+        self.hardened_chk.place(x=50, y=540)
         self.nuclear_chk.place(x=50, y=570)
         self.d10_coll_ent.place(x=260, y=510)
         self.d10_coll_lbl.place(x=200, y=510)
@@ -228,15 +233,16 @@ class StrikeTable(Toplevel):
             drm_strike += int(self.pilot_skills_cbx.get())
         if self.interceptor_vs_unit.get() and self.attacker_type_cbx.get() == 'Air Strike':
             drm_strike += 2
-        if self.actual_weather == 3:
+        if self.actual_weather.get() == 3:
             drm_strike += 3
-        if self.actual_weather == 2 and self.attacker_type_cbx.get() in AIR_ATTACKER:
+        if self.actual_weather.get() == 2 and self.attacker_type_cbx.get() in AIR_ATTACKER:
             drm_strike += 2
         row = d10_strike + drm_strike
         if row < -2:
             row = -2
         if row > 7:
             row = 7
+        row += 2
 
         if self.target_type_cbx.get() != 'Air Defense Track':
             result = ADVANCED_STRIKE_TABLE[column][row]
@@ -275,3 +281,64 @@ class StrikeTable(Toplevel):
         result = COLLATERAL_DAMAGE_TABLE[column][row]
         self.d10_coll_ent.insert(END, str(d10_coll))
         self.collateral_damage_ent.insert(END, result)
+
+    def predict_strike_result(self):
+
+        self.predict_ent.delete(0, 'end')
+
+        if self.attacker_type_cbx.get() != 'Air Strike':
+            target = STRIKE_TABLE_NO_AIR[self.attacker_type_cbx.get()]
+            column = target[self.target_type_cbx.get()]
+        else:
+            target = STRIKE_TABLE_AIR_ONLY[self.air_strike_value_cbx.get()]
+            column = target[self.target_type_cbx.get()]
+
+        drm_strike = 0
+        drm_strike += int(self.targeted_value_cbx.get())
+        if self.target_over_stacked.get():
+            drm_strike -= 2
+        if self.high_mountain.get():
+            drm_strike -= 2
+        if self.russian_rocket.get() and self.attacker_type_cbx.get() == 'Artillery':
+            drm_strike -= 1
+        if self.ah_1_ww.get():
+            drm_strike += 1
+        if self.non_us_cruise.get():
+            drm_strike += 1
+        if self.hq_reduced.get():
+            drm_strike += 1
+        if self.unit_city_fort_jungle.get():
+            drm_strike += 1
+        if self.bridge_or_beachhead.get():
+            drm_strike += 2
+        if self.interceptor_vs_unit.get():
+            drm_strike += 2
+        if self.theater_busting.get():
+            drm_strike += 2
+        if self.vs_enemy_aaa.get():
+            drm_strike += 3
+        if self.stand_off_vs_leg.get():
+            drm_strike += 3
+        if self.attacker_type_cbx.get() in AIR_ATTACKER:
+            drm_strike += int(self.aa_result_cbx.get())
+        if self.attacker_type_cbx.get() == 'Air Strike':
+            drm_strike += int(self.pilot_skills_cbx.get())
+        if self.interceptor_vs_unit.get() and self.attacker_type_cbx.get() == 'Air Strike':
+            drm_strike += 2
+        if self.actual_weather.get() == 3:
+            drm_strike += 3
+        if self.actual_weather.get() == 2 and self.attacker_type_cbx.get() in AIR_ATTACKER:
+            drm_strike += 2
+        row_min = drm_strike
+        row_max = drm_strike + 9
+        if row_min < -2:
+            row_min = -2
+        if row_max > 7:
+            row_max = 7
+        row_min += 2
+        row_max += 2
+
+        predict = sum(PREDICT_STRIKE_EFFECT[column][row_min:row_max]) / 10
+
+        self.predict_ent.insert(END, predict)
+
