@@ -8,12 +8,14 @@ from ground_combat_table import CombatResultTable
 from sof_table import SofTable
 from strike_table import StrikeTable
 from naval_warfare import NavalWarfare
+from electronic_detection import ElectronicDetection
+from supply import Supply
 
 class Calculator(Tk):
     def __init__(self):
         super().__init__()
 
-        self.geometry('300x200')
+        self.geometry('300x250')
         self.title('Main Window')
 
         clearing_ops_btn = Button(self, text='Clearing', command=self.clearing_ops, width=15)
@@ -32,6 +34,10 @@ class Calculator(Tk):
         strike_btn.place(x=150, y=80)
         naval_btn = Button(self, text='Naval', command=self.naval, width=15)
         naval_btn.place(x=150, y=140)
+        electronic_detection_btn = Button(self, text='Electronic Det', command=self.electronic_detection, width=15)
+        electronic_detection_btn.place(x=50, y=170)
+        supply_btn = Button(self, text='Supply', command=self.supply, width=15)
+        supply_btn.place(x=150, y=170)
 
     def clearing_ops(self):
         window = ClearingOperation(self)
@@ -63,4 +69,12 @@ class Calculator(Tk):
 
     def naval(self):
         window = NavalWarfare(self)
+        window.grab_set()
+
+    def electronic_detection(self):
+        window = ElectronicDetection(self)
+        window.grab_set()
+
+    def supply(self):
+        window = Supply(self)
         window.grab_set()
