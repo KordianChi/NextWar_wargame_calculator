@@ -79,8 +79,8 @@ class CombatResultTable(Toplevel):
         self.calculate_drm_ent.place(x=300, y=550)
 
         self.terrain_cbx = Combobox(self, values=('Flat', 'Flat Woods', 'Rough', 'Rough Woods', 'Marsh',
-                                                 'Highlands', 'Jungle', 'Highland Woods',
-                                                 'Mountain', 'Urban'), width=15)
+                                                  'Highlands', 'Jungle', 'Highland Woods',
+                                                  'Mountain', 'Urban'), width=15)
         self.terrain_cbx.set('Flat')
         self.terrain_cbx.place(x=20, y=10)
 
@@ -250,7 +250,6 @@ class CombatResultTable(Toplevel):
         self.defender_pred_loss_ent.place(x=160, y=610)
         self.defender_pred_retreat_lbl.place(x=70, y=640)
         self.defender_pred_retreat_ent.place(x=160, y=640)
-
 
     def add_attacker(self):
         attacker_lbl = Label(self, text=f'Attacker #{self.attacker_number}')
@@ -668,5 +667,3 @@ class CombatResultTable(Toplevel):
         self.attacker_pred_loss_ent.insert(END, str(attacker_loss))
         self.defender_pred_loss_ent.insert(END, str(defender_loss))
         self.defender_pred_retreat_ent.insert(END, str(defender_retreat))
-
-

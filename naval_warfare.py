@@ -565,6 +565,3 @@ class NavalWarfare(Toplevel):
         self.asw_survival_d10_ent.insert(END, str(d10_sub))
         self.asw_survival_drm_ent.insert(END, str(drm_survival))
         self.asw_survival_result_ent.insert(END, str(result))
-
-
-
