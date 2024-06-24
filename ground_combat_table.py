@@ -14,7 +14,7 @@ class CombatResultTable(Toplevel):
         super().__init__(parent)
 
         self.title('Combat Result Table')
-        self.geometry("850x670+10+10")
+        self.geometry("940x670+10+10")
 
         self.attacker_number = 1
         self.defender_number = 1
@@ -68,9 +68,6 @@ class CombatResultTable(Toplevel):
         self.in_city.set(False)
         self.in_city_chk = Checkbutton(self, text='Defender in city', variable=self.in_city)
 
-        self.across_river = BooleanVar()
-        self.across_river.set(False)
-        self.across_river_chk = Checkbutton(self, text='Attack across river', variable=self.across_river)
 
         self.is_fortified = BooleanVar()
         self.is_fortified.set(False)
@@ -189,7 +186,6 @@ class CombatResultTable(Toplevel):
         self.defender_navy_ent.place(x=130, y=490)
         self.attacking_5_6_side_chk.place(x=200, y=10)
         self.attacking_3_4_side_chk.place(x=200, y=40)
-        self.defender_in_installation_chk.place(x=200, y=70)
         self.multi_formation_lbl.place(x=200, y=100)
         self.multi_formation_ent.place(x=300, y=100)
         self.multi_nation_attack_chk.place(x=200, y=130)
@@ -228,7 +224,7 @@ class CombatResultTable(Toplevel):
         self.exploit_combat_chk.place(x=20, y=160)
         self.amphibious_assault_chk.place(x=20, y=130)
         self.is_fortified_chk.place(x=20, y=100)
-        self.across_river_chk.place(x=20, y=70)
+        self.defender_in_installation_chk.place(x=20, y=70)
         self.in_city_chk.place(x=20, y=40)
         self.terrain_cbx.place(x=20, y=10)
         self.clear_all_btn.place(x=20, y=550)
@@ -264,13 +260,14 @@ class CombatResultTable(Toplevel):
         attacker_supply_cbx.set('In-supply')
         attacker_strike_cbx = Combobox(self, values=('No Strike', 'Strike 1', 'Strike 2'), width=8)
         attacker_strike_cbx.set('No strike')
+        
         across_river = BooleanVar()
         across_river.set(False)
         across_river_chk = Checkbutton(self, text='Across river', variable=across_river)
-        
+    
         
         self.attacker_data.append([attacker_lbl, attack_value_ent, attacker_type_cbx,
-                                   attacker_supply_cbx, attacker_strike_cbx, across_river_chk])
+                                   attacker_supply_cbx, attacker_strike_cbx, across_river])
         
         attacker_lbl.place(x=420, y=self.y_for_attacker)
         attack_value_ent.place(x=495, y=self.y_for_attacker)
@@ -284,21 +281,23 @@ class CombatResultTable(Toplevel):
 
     def add_defender(self):
         defender_lbl = Label(self, text=f'Defender #{self.defender_number}')
-        defender_lbl.place(x=420, y=self.y_for_defender)
         defender_value_ent = Entry(self, width=5)
         defender_value_ent.insert(END, '0')
-        defender_value_ent.place(x=495, y=self.y_for_defender)
         defender_type_cbx = Combobox(self, values=('Leg', 'Mechanized', 'Armored', 'Mtn', 'Light'), width=12)
         defender_type_cbx.set('Leg')
-        defender_type_cbx.place(x=555, y=self.y_for_defender)
         defender_supply_cbx = Combobox(self, values=('In-supply', 'Out-supply', 'Isolated'), width=10)
         defender_supply_cbx.set('In-supply')
-        defender_supply_cbx.place(x=655, y=self.y_for_defender)
         defender_strike_cbx = Combobox(self, values=('No Strike', 'Strike 1', 'Strike 2'), width=8)
         defender_strike_cbx.set('No strike')
-        defender_strike_cbx.place(x=755, y=self.y_for_defender)
         self.defender_data.append([defender_lbl, defender_value_ent, defender_type_cbx,
                                    defender_supply_cbx, defender_strike_cbx])
+        
+        defender_lbl.place(x=420, y=self.y_for_defender)
+        defender_value_ent.place(x=495, y=self.y_for_defender)
+        defender_type_cbx.place(x=555, y=self.y_for_defender)
+        defender_supply_cbx.place(x=655, y=self.y_for_defender)
+        defender_strike_cbx.place(x=755, y=self.y_for_defender)
+        
         self.defender_number += 1
         self.y_for_defender += 30
 
@@ -366,7 +365,7 @@ class CombatResultTable(Toplevel):
                 if widgets[2].get() == 'Armored' or widgets[2].get() == 'Mechanized':
                     att = ceil(att / 2)
 
-            if self.across_river.get():
+            if widgets[5].get():
                 att = ceil(att / 2)
 
             att_sum += att
