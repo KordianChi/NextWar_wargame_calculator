@@ -219,6 +219,7 @@ class CombatResultTable(Toplevel):
         self.defender_arty_cbx.place(x=130, y=250)
         self.defender_arty_lbl.place(x=20, y=250)
         self.attacker_arty_lbl.place(x=20, y=220)
+        self.attacker_arty_cbx.place(x=130, y=220)
         self.surprise_cbx.place(x=130, y=190)
         self.surprise_lbl.place(x=20, y=190)
         self.exploit_combat_chk.place(x=20, y=160)
@@ -265,9 +266,8 @@ class CombatResultTable(Toplevel):
         across_river.set(False)
         across_river_chk = Checkbutton(self, text='Across river', variable=across_river)
     
-        
         self.attacker_data.append([attacker_lbl, attack_value_ent, attacker_type_cbx,
-                                   attacker_supply_cbx, attacker_strike_cbx, across_river])
+                                   attacker_supply_cbx, attacker_strike_cbx, across_river_chk, across_river])
         
         attacker_lbl.place(x=420, y=self.y_for_attacker)
         attack_value_ent.place(x=495, y=self.y_for_attacker)
@@ -317,9 +317,36 @@ class CombatResultTable(Toplevel):
         self.combat_odds_ent.delete(0, 'end')
         self.reduce_attacker_loss_ent.delete(0, 'end')
         self.result_dice_ent.delete(0, 'end')
+        
+        self.defender_in_installation.set(False)
+        self.amphibious_assault.set(False)
+        self.in_city.set(False)
+        self.is_fortified.set(False)
+        self.exploit_combat.set(False)
+        self.attacking_5_6_side.set(False)
+        self.attacking_3_4_side.set(False)
+        self.multi_nation_attack.set(False)
+        self.irop_prc_attack.set(False)
+        self.defender_cyber_shift.set(False)
+        self.attacker_cyber_shift.set(False)
+        
+        self.terrain_cbx.set('Flat')
+        self.surprise_cbx.set('0')
+        self.attacker_arty_cbx.set('0')
+        self.defender_arty_cbx.set('0')
+        self.attacker_1_helos_cbx.set('0')
+        self.attacker_2_helos_cbx.set('0')
+        self.defender_helos_cbx.set('0')
+        self.attacker_1_aircraft_cbx.set('0')
+        self.attacker_2_aircraft_cbx.set('0')
+        self.defender_aircraft_cbx.set('0')
+        
+        self.attacker_navy_ent.delete(0, 'end')
+        self.defender_navy_ent.delete(0, 'end')
+        self.multi_formation_ent.delete(0, 'end')
 
         for widgets in self.attacker_data:
-            for widget in widgets:
+            for widget in widgets[:-1]:
                 widget.destroy()
         for widgets in self.defender_data:
             for widget in widgets:
@@ -365,7 +392,7 @@ class CombatResultTable(Toplevel):
                 if widgets[2].get() == 'Armored' or widgets[2].get() == 'Mechanized':
                     att = ceil(att / 2)
 
-            if widgets[5].get():
+            if widgets[6]:
                 att = ceil(att / 2)
 
             att_sum += att
