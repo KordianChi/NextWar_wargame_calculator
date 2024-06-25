@@ -16,13 +16,22 @@ class AirToAirCombatTable(Toplevel):
         self.geometry("600x600+10+10")
 
         self.attacker_1_value_lbl = Label(self, text='Attacker #1:')
+        self.attacker_2_value_lbl = Label(self, text='Attacker #2:')
         self.attacker_1_value_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6'), width=5)
+        self.attacker_2_value_cbx = Combobox(self, values=('1', '2', '3', '4', '5', '6'), width=5)
+        
         self.defender_1_value_lbl = Label(self, text='Defender #1:')
         self.defender_1_value_cbx = Combobox(self, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
+        
         self.attacker_1_pilot_skills_lbl = Label(self, text='Pilot skills:')
+        self.attacker_2_pilot_skills_lbl = Label(self, text='Pilot skills:')
         self.attacker_1_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+        self.attacker_2_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+        
         self.defender_1_pilot_skills_lbl = Label(self, text='Pilot skills')
+        self.defender_2_pilot_skills_lbl = Label(self, text='Pilot skills')
         self.defender_1_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
+        self.defender_2_pilot_skills_cbx = Combobox(self, values=('-2', '-1', '0', '1', '2'), width=5, state='disabled')
         
         
         self.engagement_lbl = Label(self, text='Engagement:')
@@ -72,10 +81,19 @@ class AirToAirCombatTable(Toplevel):
         self.not_proper_1_att.set(False)
         self.not_proper_1_att_chk = Checkbutton(self, text='not NATO/US/JPN/PRC', variable=self.not_proper_1_att,
                                               state='disabled')
+        
+        self.not_proper_2_att = BooleanVar()
+        self.not_proper_2_att.set(False)
+        self.not_proper_2_att_chk = Checkbutton(self, text='not NATO/US/JPN/PRC', variable=self.not_proper_2_att,
+                                              state='disabled')
 
         self.strike_1_att = BooleanVar()
         self.strike_1_att.set(False)
         self.strike_1_att_chk = Checkbutton(self, text='CS firing', variable=self.strike_1_att)
+        
+        self.strike_2_att = BooleanVar()
+        self.strike_2_att.set(False)
+        self.strike_2_att_chk = Checkbutton(self, text='CS firing', variable=self.strike_2_att)
 
         self.strike_1_def = BooleanVar()
         self.strike_1_def.set(False)
@@ -97,6 +115,14 @@ class AirToAirCombatTable(Toplevel):
 
         self.attacker_1_value_lbl.place(x=50, y=30)
         self.attacker_1_pilot_skills_lbl.place(x=50, y=60)
+        
+        self.attacker_2_value_lbl.place(x=50, y=150)
+        self.attacker_2_pilot_skills_lbl.place(x=50, y=180)
+        self.attacker_2_value_cbx.place(x=150, y=150)
+        self.attacker_2_pilot_skills_cbx.place(x=150, y=180)
+        self.strike_2_att_chk.place(x=50, y=210)
+        self.not_proper_2_att_chk.place(x=50, y=240)
+        
         self.defender_1_value_lbl.place(x=250, y=30)
         self.defender_1_pilot_skills_lbl.place(x=250, y=60)
         self.attacker_1_value_cbx.place(x=150, y=30)
@@ -138,15 +164,19 @@ class AirToAirCombatTable(Toplevel):
         actual_distance = actual_distance.get()
         if actual_distance == 3:
             self.attacker_1_pilot_skills_cbx.config(state='normal')
+            self.attacker_2_pilot_skills_cbx.config(state='normal')
             self.defender_1_pilot_skills_cbx.config(state='normal')
         else:
             self.attacker_1_pilot_skills_cbx.config(state='disabled')
+            self.attacker_2_pilot_skills_cbx.config(state='disabled')
             self.defender_1_pilot_skills_cbx.config(state='disabled')
         if actual_distance == 2:
             self.not_proper_1_att_chk.config(state='normal')
+            self.not_proper_2_att_chk.config(state='normal')
             self.not_proper_1_def_chk.config(state='normal')
         else:
             self.not_proper_1_att_chk.config(state='disabled')
+            self.not_proper_2_att_chk.config(state='disabled')
             self.not_proper_1_def_chk.config(state='disabled')
 
     def calculate_a2a(self):
