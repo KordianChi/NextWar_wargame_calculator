@@ -23,7 +23,7 @@ class AirToAirCombatTable(Toplevel):
         self.defender_1_value_lbl = Label(self, text='Defender #1:')
         self.defender_2_value_lbl = Label(self, text='Defender #2:')
         self.defender_1_value_cbx = Combobox(self, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
-        self.defender_2_value_cbx = Combobox(self, values=('#', '0', '1', '2', '3', '4', '5', '6'), width=5)
+        self.defender_2_value_cbx = Combobox(self, values=('0', '1', '2', '3', '4', '5', '6'), width=5)
         
         self.attacker_1_pilot_skills_lbl = Label(self, text='Pilot skills:')
         self.attacker_2_pilot_skills_lbl = Label(self, text='Pilot skills:')
@@ -134,11 +134,17 @@ class AirToAirCombatTable(Toplevel):
         
 
 
+        self.not_mutual_1_def = BooleanVar()
+        self.not_mutual_1_def.set(False)
+        self.not_mutual_chk_1_def = Checkbutton(self, text='defend only', variable=self.not_mutual_1_def)
+        
         self.not_mutual_2_def = BooleanVar()
         self.not_mutual_2_def.set(False)
         self.not_mutual_chk_2_def = Checkbutton(self, text='defend only', variable=self.not_mutual_2_def)
 
         self.air_2_air_btn = Button(self, text='Calculate', command=self.calculate_a2a)
+        
+        self.clear_all_air_btn = Button(self, text='Clear all', command=self.clear_all_air)
 
         self.result_att_1_ent = Entry(self, width=7)
         self.d10_att_1_ent = Entry(self, width=7)
@@ -178,7 +184,9 @@ class AirToAirCombatTable(Toplevel):
         self.not_mutual_chk_2_def.place(x=360, y=210)
         
         
+        
         self.not_mutual_chk_1_att.place(x=150, y=90)
+        self.not_mutual_chk_1_def.place(x=360, y=90)
         self.defender_1_value_cbx.place(x=360, y=30)
         self.defender_1_pilot_skills_cbx.place(x=360, y=60)
         self.strike_1_def_chk.place(x=260, y=90)
@@ -198,6 +206,7 @@ class AirToAirCombatTable(Toplevel):
         self.strike_1_att_chk.place(x=50, y=90)
         self.not_proper_1_att_chk.place(x=50, y=120)
         self.air_2_air_btn.place(x=50, y=270)
+        self.clear_all_air_btn.place(x=120, y=270)
         self.d10_att_1_ent.place(x=150, y=330)
         self.DRM_att_1_ent.place(x=150, y=300)
         self.result_att_1_ent.place(x=150, y=360)
@@ -331,18 +340,28 @@ class AirToAirCombatTable(Toplevel):
         self.d10_att_1_ent.delete(0, 'end')
         self.DRM_att_1_ent.delete(0, 'end')
         self.result_att_1_ent.delete(0, 'end')
+        
         self.d10_def_1_ent.delete(0, 'end')
         self.DRM_def_1_ent.delete(0, 'end')
         self.result_def_1_ent.delete(0, 'end')
+        
+        self.d10_att_2_ent.delete(0, 'end')
+        self.DRM_att_2_ent.delete(0, 'end')
+        self.result_att_2_ent.delete(0, 'end')
+        
+        self.d10_def_2_ent.delete(0, 'end')
+        self.DRM_def_2_ent.delete(0, 'end')
+        self.result_def_2_ent.delete(0, 'end')
+        
 
         if self.defender_1_value_cbx.get() == '#':
-            target = 0
+            target_att = 0
         else:
-            target = int(self.defender_1_value_cbx.get())
+            target_att = int(self.defender_1_value_cbx.get())
             
         if not self.not_mutual_1_att.get():
             fire_1 = int(self.attacker_1_value_cbx.get())
-            diff_att_1 = fire_1 - target
+            diff_att_1 = fire_1 - target_att
             if diff_att_1 > 4:
                 diff_att_1 = 4
             if diff_att_1 < -4:
@@ -355,7 +374,7 @@ class AirToAirCombatTable(Toplevel):
                 DRM_att_1 += 3
             if self.strike_1_att.get():
                 DRM_att_1 += 2
-            if target == 0 and self.actual_distance.get() == 2:
+            if target_att == 0 and self.actual_distance.get() == 2:
                 DRM_att_1 -= 1
             if self.not_proper_1_att.get() and self.actual_distance.get() == 2:
                 DRM_att_1 += 1
@@ -380,61 +399,211 @@ class AirToAirCombatTable(Toplevel):
             d10_att_1 = '-'
             DRM_att_1 = '-'
             result_att_1 = '-'
+            
+        if not self.not_mutual_2_att.get() and self.engagement.get() == 2:
+            
+            fire_2 = int(self.attacker_2_value_cbx.get())
+            diff_att_2 = fire_2 - target_att
+            if diff_att_2 > 4:
+                diff_att_2 = 4
+            if diff_att_2 < -4:
+                diff_att_2 = -4
+            column_att_2 = -diff_att_2 + 4
+            
+            d10_att_2 = randint(0, 9)
+            DRM_att_2 = 0
+            if self.actual_weather.get() == 3:
+                DRM_att_2 += 3
+            if self.strike_2_att.get():
+                DRM_att_2 += 2
+            if target_att == 0 and self.actual_distance.get() == 2:
+                DRM_att_2 -= 1
+            if self.not_proper_1_att.get() and self.actual_distance.get() == 2:
+                DRM_att_2 += 1
+            if self.actual_distance.get() == 3:
+                skill_att_2 = int(self.attacker_2_pilot_skills_cbx.get())
+                DRM_att_2 += skill_att_2
+            if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
+                DRM_att_2 += 1
+    
+            row_att_2 = d10_att_2 + DRM_att_2
+            if row_att_2 > 10:
+                row_att_2 = 10
+            if row_att_2 < -2:
+                row_att_2 = -2
+            row_att_1 += 2
+    
+            if self.actual_distance.get() == 3:
+                result_att_2 = AIR_COMBAT_RESULT_DOGFIGHT[column_att_2][row_att_2]
+            else:
+                result_att_2 = AIR_COMBAT_RESULT_LONG[column_att_2][row_att_2]
+        else:
+            d10_att_2 = '-'
+            DRM_att_2 = '-'
+            result_att_2 = '-'
+            
+        vs_bomber = target_att == 0
+        
+        target_def = int(self.attacker_1_value_cbx.get())
+        
+        if not self.not_mutual_1_def.get() and not vs_bomber:
+            
+            fire_1 = int(self.defender_1_value_cbx.get())
+            diff_def_1 = fire_1 - target_def
 
-        vs_bomber = target == 0
+            if diff_def_1 > 4:
+                diff_def_1 = 4
+            if diff_def_1 < -4:
+                diff_def_1 = -4
+            column_def_1 = -diff_def_1 + 4
 
-        if not self.not_mutual.get() and not vs_bomber:
-
-            diff_def = target - fire_1
-
-            if diff_def > 4:
-                diff_def = 4
-            if diff_def < -4:
-                diff_def = -4
-            column_def = -diff_def + 4
-
-            d10_def = randint(0, 9)
-            DRM_def = 0
+            d10_def_1 = randint(0, 9)
+            DRM_def_1 = 0
 
             if self.actual_weather.get() == 3:
-                DRM_def += 3
-            if self.strike_def.get():
-                DRM_def += 2
-            if target == 0 and self.actual_distance.get() == 2:
-                DRM_def -= 1
+                DRM_def_1 += 3
+            if self.strike_1_def.get():
+                DRM_def_1 += 2
+            if target_def == 0 and self.actual_distance.get() == 2:
+                DRM_def_1 -= 1
             if self.not_proper_1_def.get() and self.actual_distance.get() == 2:
-                DRM_def += 1
+                DRM_def_1 += 1
             if self.actual_distance.get() == 3:
-                skill_def = int(self.defender_1_pilot_skills_cbx.get())
-                DRM_def += skill_def
+                skill_def_1 = int(self.defender_1_pilot_skills_cbx.get())
+                DRM_def_1 += skill_def_1
             if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
-                DRM_def += 1
+                DRM_def_1 += 1
 
-            row_def = d10_def + DRM_def
-            if row_def > 10:
-                row_def = 10
-            if row_def < -2:
-                row_def = -2
-            row_def += 2
+            row_def_1 = d10_def_1 + DRM_def_1
+            if row_def_1 > 10:
+                row_def_1 = 10
+            if row_def_1 < -2:
+                row_def_1 = -2
+            row_def_1 += 2
 
             if self.actual_distance.get() == 3:
-                result_def = AIR_COMBAT_RESULT_DOGFIGHT[column_def][row_def]
+                result_def_1 = AIR_COMBAT_RESULT_DOGFIGHT[column_def_1][row_def_1]
             else:
-                result_def = AIR_COMBAT_RESULT_LONG[column_def][row_def]
+                result_def_1 = AIR_COMBAT_RESULT_LONG[column_def_1][row_def_1]
         else:
-            d10_def = '-'
-            DRM_def = '-'
-            result_def = '-'
+            d10_def_1 = '-'
+            DRM_def_1 = '-'
+            result_def_1 = '-'
+            
+        if not self.not_mutual_2_def.get():
+            
+            
+            if self.defender_2_value_cbx.get() == '':
+                fire_2 = 0
+            else:
+                fire_2 = int(self.defender_2_value_cbx.get())
+                
+            diff_def_2 = fire_2 - target_def
+
+            if diff_def_2 > 4:
+                diff_def_2 = 4
+            if diff_def_2 < -4:
+                diff_def_2 = -4
+            column_def_2 = -diff_def_2 + 4
+
+            d10_def_2 = randint(0, 9)
+            DRM_def_2 = 0
+
+            if self.actual_weather.get() == 3:
+                DRM_def_2 += 3
+            if self.strike_1_def.get():
+                DRM_def_2 += 2
+            if target_def == 0 and self.actual_distance.get() == 2:
+                DRM_def_2 -= 1
+            if self.not_proper_2_def.get() and self.actual_distance.get() == 2:
+                DRM_def_2 += 1
+            if self.actual_distance.get() == 3:
+                skill_def_2 = int(self.defender_2_pilot_skills_cbx.get())
+                DRM_def_2 += skill_def_2
+            if self.actual_weather.get() == 2 and self.actual_distance.get() == 3:
+                DRM_def_2 += 1
+
+            row_def_2 = d10_def_2 + DRM_def_2
+            if row_def_2 > 10:
+                row_def_2 = 10
+            if row_def_2 < -2:
+                row_def_2 = -2
+            row_def_2 += 2
+
+            if self.actual_distance.get() == 3:
+                result_def_2 = AIR_COMBAT_RESULT_DOGFIGHT[column_def_2][row_def_2]
+            else:
+                result_def_2 = AIR_COMBAT_RESULT_LONG[column_def_2][row_def_2]
+        else:
+            d10_def_2 = '-'
+            DRM_def_2 = '-'
+            result_def_2 = '-'
 
         self.result_att_1_ent.insert(END, result_att_1)
         self.DRM_att_1_ent.insert(END, str(DRM_att_1))
         self.d10_att_1_ent.insert(END, str(d10_att_1))
-        self.d10_def_1_ent.insert(END, str(d10_def))
-        self.DRM_def_1_ent.insert(END, str(DRM_def))
-        self.result_def_1_ent.insert(END, str(result_def))
+        
+        self.result_att_2_ent.insert(END, result_att_2)
+        self.DRM_att_2_ent.insert(END, str(DRM_att_2))
+        self.d10_att_2_ent.insert(END, str(d10_att_2))
+        
+        self.d10_def_1_ent.insert(END, str(d10_def_1))
+        self.DRM_def_1_ent.insert(END, str(DRM_def_1))
+        self.result_def_1_ent.insert(END, str(result_def_1))
+        
+        self.d10_def_2_ent.insert(END, str(d10_def_2))
+        self.DRM_def_2_ent.insert(END, str(DRM_def_2))
+        self.result_def_2_ent.insert(END, str(result_def_2))
+        
+    def clear_all_air(self):
 
         self.not_proper_1_att.set(False)
         self.strike_1_att.set(False)
+        self.not_proper_1_att.set(False)
+        self.strike_1_att.set(False)
+        self.not_mutual_1_att.set(False)
+        self.attacker_1_value_cbx.set('')
+        self.attacker_1_pilot_skills_cbx.set('')
+        
+        self.not_proper_2_att.set(False)
+        self.strike_2_att.set(False)
+        self.not_proper_2_att.set(False)
+        self.strike_2_att.set(False)
+        self.not_mutual_2_att.set(False)
+        self.attacker_2_value_cbx.set('')
+        self.attacker_2_pilot_skills_cbx.set('')
+
+
         self.not_proper_1_def.set(False)
         self.strike_1_def.set(False)
-        self.not_mutual.set(False)
+        self.not_proper_1_def.set(False)
+        self.strike_1_def.set(False)
+        self.not_mutual_1_def.set(False)
+        self.defender_1_value_cbx.set('')
+        self.defender_1_pilot_skills_cbx.set('')
+
+
+        self.not_proper_2_def.set(False)
+        self.strike_2_def.set(False)
+        self.not_proper_2_def.set(False)
+        self.strike_2_def.set(False)
+        self.not_mutual_2_def.set(False)
+        self.defender_2_value_cbx.set('')
+        self.defender_2_pilot_skills_cbx.set('')
+        
+        self.d10_att_1_ent.delete(0, 'end')
+        self.DRM_att_1_ent.delete(0, 'end')
+        self.result_att_1_ent.delete(0, 'end')
+        
+        self.d10_def_1_ent.delete(0, 'end')
+        self.DRM_def_1_ent.delete(0, 'end')
+        self.result_def_1_ent.delete(0, 'end')
+        
+        self.d10_att_2_ent.delete(0, 'end')
+        self.DRM_att_2_ent.delete(0, 'end')
+        self.result_att_2_ent.delete(0, 'end')
+        
+        self.d10_def_2_ent.delete(0, 'end')
+        self.DRM_def_2_ent.delete(0, 'end')
+        self.result_def_2_ent.delete(0, 'end')
+
