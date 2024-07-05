@@ -490,13 +490,11 @@ class AirToAirCombatTable(Toplevel):
             DRM_def_1 = '-'
             result_def_1 = '-'
             
-        if not self.not_mutual_2_def.get():
+        if not self.not_mutual_2_def.get() and self.engagement.get() == 3:
             
             
-            if self.defender_2_value_cbx.get() == '':
-                fire_2 = 0
-            else:
-                fire_2 = int(self.defender_2_value_cbx.get())
+
+            fire_2 = int(self.defender_2_value_cbx.get())
                 
             diff_def_2 = fire_2 - target_def
 
@@ -556,6 +554,14 @@ class AirToAirCombatTable(Toplevel):
         self.result_def_2_ent.insert(END, str(result_def_2))
         
     def clear_all_air(self):
+        
+        self.d10_att_2_ent.config(state='normal')
+        self.DRM_att_2_ent.config(state='normal')
+        self.result_att_2_ent.config(state='normal')
+        
+        self.d10_def_2_ent.config(state='normal')
+        self.DRM_def_2_ent.config(state='normal')
+        self.result_def_2_ent.config(state='normal')
 
         self.not_proper_1_att.set(False)
         self.strike_1_att.set(False)
