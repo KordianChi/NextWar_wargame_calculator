@@ -344,6 +344,11 @@ class CombatResultTable(Toplevel):
         self.attacker_navy_ent.delete(0, 'end')
         self.defender_navy_ent.delete(0, 'end')
         self.multi_formation_ent.delete(0, 'end')
+        
+        self.attacker_navy_ent.insert(END, 0)
+        self.defender_navy_ent.insert(END, 0)
+        self.multi_formation_ent.insert(END, 0)
+        
 
         for widgets in self.attacker_data:
             for widget in widgets[:-1]:
@@ -373,8 +378,7 @@ class CombatResultTable(Toplevel):
                 if att < 1:
                     att = 1
             if widgets[3].get() != 'In-supply':
-                att = att / 2
-                att = ceil(att)
+                max(1, floor(att / 2))
             defender_type_list = []
             for element in self.defender_data:
                 defender_type_list.append(element[2].get())
@@ -390,10 +394,10 @@ class CombatResultTable(Toplevel):
                                                               'Highland Woods', 'Mountain']
             if armored_disadvantage:
                 if widgets[2].get() == 'Armored' or widgets[2].get() == 'Mechanized':
-                    att = ceil(att / 2)
+                    max(1, floor(att / 2))
 
-            if widgets[6]:
-                att = ceil(att / 2)
+            if widgets[6].get():
+                att = max(1, floor(att / 2))
 
             att_sum += att
         att_sum += int(self.attacker_hq_cbx.get())
@@ -437,11 +441,11 @@ class CombatResultTable(Toplevel):
 
         drm = 0
         support_defender_drm = 0
-        support_defender_drm -= int(self.defender_helos_cbx.get())
-        support_defender_drm -= int(self.defender_aircraft_cbx.get())
-        support_defender_drm -= int(self.defender_navy_ent.get())
-        if support_defender_drm < -6:
-            support_defender_drm = -6
+        support_defender_drm += int(self.defender_helos_cbx.get())
+        support_defender_drm += int(self.defender_aircraft_cbx.get())
+        support_defender_drm += int(self.defender_navy_ent.get())
+        if support_defender_drm > 6:
+            support_defender_drm = 6
 
         defender_type_list = []
         for element in self.defender_data:
@@ -450,22 +454,22 @@ class CombatResultTable(Toplevel):
         if 'Light' in defender_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
                                                                         'Jungle', 'Highland Woods',
                                                                         'Mountain', 'Urban']:
-            elite_infantry_defender_drm -= 1
+            elite_infantry_defender_drm += 1
 
         if 'Mtn' in defender_type_list and self.terrain_cbx.get() in ['Highlands', 'Highland Woods', 'Mountain']:
-            elite_infantry_defender_drm -= 1
+            elite_infantry_defender_drm += 1
 
-        if elite_infantry_defender_drm < -1:
-            elite_infantry_defender_drm = -1
+        if elite_infantry_defender_drm > 1:
+            elite_infantry_defender_drm = 1
 
         support_attacker_drm = 0
-        support_attacker_drm += int(self.attacker_1_helos_cbx.get())
-        support_attacker_drm += int(self.attacker_2_helos_cbx.get())
-        support_attacker_drm += int(self.attacker_1_aircraft_cbx.get())
-        support_attacker_drm += int(self.attacker_2_aircraft_cbx.get())
-        support_attacker_drm += int(self.attacker_navy_ent.get())
-        if support_attacker_drm > 6:
-            support_attacker_drm = 6
+        support_attacker_drm -= int(self.attacker_1_helos_cbx.get())
+        support_attacker_drm -= int(self.attacker_2_helos_cbx.get())
+        support_attacker_drm -= int(self.attacker_1_aircraft_cbx.get())
+        support_attacker_drm -= int(self.attacker_2_aircraft_cbx.get())
+        support_attacker_drm -= int(self.attacker_navy_ent.get())
+        if support_attacker_drm < -6:
+            support_attacker_drm = -6
 
         elite_infantry_attacker_drm = 0
         attacker_type_list = []
@@ -474,12 +478,12 @@ class CombatResultTable(Toplevel):
         if 'Light' in attacker_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
                                                                         'Jungle', 'Highland Woods',
                                                                         'Mountain', 'Urban']:
-            elite_infantry_attacker_drm += 1
+            elite_infantry_attacker_drm -= 1
 
         if 'Mtn' in attacker_type_list and self.terrain_cbx.get() in ['Highlands', 'Highland Woods', 'Mountain']:
-            elite_infantry_attacker_drm += 1
-        if elite_infantry_attacker_drm > 1:
-            elite_infantry_attacker_drm = 1
+            elite_infantry_attacker_drm -= 1
+        if elite_infantry_attacker_drm < -1:
+            elite_infantry_attacker_drm = -1
 
         drm += support_defender_drm
         drm += support_attacker_drm
@@ -580,7 +584,7 @@ class CombatResultTable(Toplevel):
                     defe_res = ORDER_TO_FRAC[order]
                     att_res = 1
         dice = randint(0, 9)
-        row = dice + int(self.calculate_drm_ent.get())
+        row = dice + drm
         # row normalization
         if row > 12:
             row = 12
@@ -600,6 +604,8 @@ class CombatResultTable(Toplevel):
         self.combat_odds_ent.insert(END, odds)
         self.combat_result_ent.insert(END, str(COMBAT_RESULT_TABLE[column][row]))
         self.reduce_attacker_loss_ent.insert(END, reduce_attacker_lost)
+        self.calculate_drm_ent.delete(0, 'end')
+        self.calculate_drm_ent.insert(END, str(drm))
 
     def combat_result_predict(self):
 
