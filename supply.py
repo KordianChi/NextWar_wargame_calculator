@@ -75,7 +75,7 @@ class Supply(Toplevel):
 
     def emergency_supply(self):
 
-        self.supply_ent.delete(0, 'end')
+        self.em_supply_ent.delete(0, 'end')
 
         result = '-'
         d10 = randint(0, 9)
@@ -87,4 +87,4 @@ class Supply(Toplevel):
             if d10 < 3:
                 result = 'Supply'
 
-        self.supply_ent.insert(END, result)
+        self.em_supply_ent.insert(END, result)
