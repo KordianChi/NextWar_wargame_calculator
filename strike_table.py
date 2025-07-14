@@ -89,6 +89,11 @@ class StrikeTable(Toplevel):
         self.aa_result_lbl = Label(self, text='AA result:')
         self.aa_result_cbx = Combobox(self, values=('0', '1', '2', '3', '4'), width=5)
         self.aa_result_cbx.set('0')
+        
+        self.north_sea_growler = BooleanVar()
+        self.north_sea_growler.set(False)
+        self.north_sea_growler_chk = Checkbutton(self, text='EA-18 North Sea', variable=self.north_sea_growler)
+
 
         self.weather_lbl = Label(self, text='Weather:')
         self.actual_weather = IntVar()
@@ -152,6 +157,7 @@ class StrikeTable(Toplevel):
         self.stand_off_vs_leg_chk.place(x=50, y=330)
         self.russian_rocket_chk.place(x=50, y=360)
         self.interceptor_vs_unit_chk.place(x=50, y=390)
+        self.north_sea_growler_chk.place(x=250, y=390)
 
         self.weather_lbl.place(x=250, y=90)
         self.clear_weather_rb.place(x=250, y=120)

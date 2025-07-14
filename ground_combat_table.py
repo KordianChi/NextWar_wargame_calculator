@@ -139,9 +139,9 @@ class CombatResultTable(Toplevel):
         self.multi_nation_attack.set(False)
         self.multi_nation_attack_chk = Checkbutton(self, text='Multination attack', variable=self.multi_nation_attack)
 
-        self.irop_prc_attack = BooleanVar()
-        self.irop_prc_attack.set(False)
-        self.irop_prc_attack_chk = Checkbutton(self, text='IROP & PRC attack', variable=self.irop_prc_attack)
+        # self.irop_prc_attack = BooleanVar()
+        # self.irop_prc_attack.set(False)
+        # self.irop_prc_attack_chk = Checkbutton(self, text='IROP & PRC attack', variable=self.irop_prc_attack)
 
         self.attacker_cyber_shift = BooleanVar()
         self.attacker_cyber_shift.set(False)
@@ -189,7 +189,7 @@ class CombatResultTable(Toplevel):
         self.multi_formation_lbl.place(x=200, y=100)
         self.multi_formation_ent.place(x=300, y=100)
         self.multi_nation_attack_chk.place(x=200, y=130)
-        self.irop_prc_attack_chk.place(x=200, y=160)
+        # self.irop_prc_attack_chk.place(x=200, y=160)
         self.attacker_cyber_shift_chk.place(x=200, y=190)
         self.defender_cyber_shift_chk.place(x=200, y=220)
         self.combat_result_btn.place(x=200, y=280)
@@ -475,12 +475,15 @@ class CombatResultTable(Toplevel):
         attacker_type_list = []
         for element in self.attacker_data:
             attacker_type_list.append(element[2].get())
-        if 'Light' in attacker_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh', 'Highlands',
+        if 'Light' in attacker_type_list and self.terrain_cbx.get() in ['Rough', 'Rough Woods', 'Marsh',
+                                                                        'Highlands',
                                                                         'Jungle', 'Highland Woods',
                                                                         'Mountain', 'Urban']:
             elite_infantry_attacker_drm -= 1
 
-        if 'Mtn' in attacker_type_list and self.terrain_cbx.get() in ['Highlands', 'Highland Woods', 'Mountain']:
+        if 'Mtn' in attacker_type_list and self.terrain_cbx.get() in ['Highlands',
+                                                                      'Highland Woods',
+                                                                      'Mountain']:
             elite_infantry_attacker_drm -= 1
         if elite_infantry_attacker_drm < -1:
             elite_infantry_attacker_drm = -1
