@@ -134,10 +134,10 @@ class CombatResultTable(Toplevel):
         self.multi_formation_lbl = Label(self, text='Multi-formation:')
         self.multi_formation_ent = Entry(self, width=7)
         self.multi_formation_ent.insert(END, '0')
-
-        self.multi_nation_attack = BooleanVar()
-        self.multi_nation_attack.set(False)
-        self.multi_nation_attack_chk = Checkbutton(self, text='Multination attack', variable=self.multi_nation_attack)
+        
+        self.multi_nation_lbl = Label(self, text='Multi-nation:')
+        self.multi_nation_ent = Entry(self, width=7)
+        self.multi_nation_ent.insert(END, '0')
 
         # self.irop_prc_attack = BooleanVar()
         # self.irop_prc_attack.set(False)
@@ -188,7 +188,8 @@ class CombatResultTable(Toplevel):
         self.attacking_3_4_side_chk.place(x=200, y=40)
         self.multi_formation_lbl.place(x=200, y=100)
         self.multi_formation_ent.place(x=300, y=100)
-        self.multi_nation_attack_chk.place(x=200, y=130)
+        self.multi_nation_lbl.place(x=200, y=130)
+        self.multi_nation_ent.place(x=300, y=130)
         # self.irop_prc_attack_chk.place(x=200, y=160)
         self.attacker_cyber_shift_chk.place(x=200, y=190)
         self.defender_cyber_shift_chk.place(x=200, y=220)
@@ -326,7 +327,7 @@ class CombatResultTable(Toplevel):
         self.attacking_5_6_side.set(False)
         self.attacking_3_4_side.set(False)
         self.multi_nation_attack.set(False)
-        self.irop_prc_attack.set(False)
+        # self.irop_prc_attack.set(False)
         self.defender_cyber_shift.set(False)
         self.attacker_cyber_shift.set(False)
         
@@ -503,8 +504,8 @@ class CombatResultTable(Toplevel):
         drm += int(self.multi_formation_ent.get())
         if self.multi_nation_attack.get():
             drm += 1
-        if self.irop_prc_attack.get():
-            drm += 2
+        # if self.irop_prc_attack.get():
+        #    drm += 2
 
         self.calculate_att_ent.insert(END, str(att_sum))
         self.calculate_def_ent.insert(END, str(def_sum))
